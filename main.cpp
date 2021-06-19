@@ -1,3 +1,4 @@
+#include "ft_vector.h"
 #include <iostream>
 #include <sstream>
 #include <algorithm>
@@ -11,8 +12,8 @@
 //#include "map.hpp"
 //#include "queue.hpp"
 //#include "priority_queue.hpp"
+
 //#include "stack.hpp"
-#include "ft_vector.h"
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
@@ -133,19 +134,19 @@ void		printbothdirs(const Container1& scont, const Container2& fcont)
             std::cout << " " << *(fit++);
         std::cout << std::endl;
     }
-//    std::cout << "reverse:" << std::endl;
-//    {
-//        typename Container1::const_reverse_iterator sit = scont.rbegin();
-//        typename Container2::const_reverse_iterator fit = fcont.rbegin();
-//        std::cout << "scont contains: ";
-//        while (sit != scont.rend())
-//            std::cout << " " << *sit++;
-//
-//        std::cout << std::endl << "fcont contains: ";
-//        while (fit != fcont.rend())
-//            std::cout << " " << *fit++;
-//        std::cout << std::endl;
-//    }
+    std::cout << "reverse:" << std::endl;
+    {
+        typename Container1::const_reverse_iterator sit = scont.rbegin();
+        typename Container2::const_reverse_iterator fit = fcont.rbegin();
+        std::cout << "scont contains: ";
+        while (sit != scont.rend())
+            std::cout << " " << *sit++;
+
+        std::cout << std::endl << "fcont contains: ";
+        while (fit != fcont.rend())
+            std::cout << " " << *fit++;
+        std::cout << std::endl;
+    }
 }
 //
 //template <class Key, class T>
@@ -858,18 +859,18 @@ void		ft_vector_tests(int ac, char **av)
         sit = svect.begin();
         fit = fvect.begin();
 
-//        while (sit != svect.end() && fit != fvect.end())
-//        {
-//            std::ptrdiff_t	sdist = std::distance(sit, svect.begin());
-//            std::ptrdiff_t	fdist = std::distance(fit, fvect.begin());
-//            std::cout << sdist << "\t" << fdist << std::endl;
-//            sit = 1 + sit;
-//            fit = 1 + fit;
-//            sit = sit - 1;
-//            fit = fit - 1;
-//            sit = sit + 1;
-//            fit = fit + 1;
-//        }
+        while (sit != svect.end() && fit != fvect.end())
+        {
+            std::ptrdiff_t	sdist = std::distance(sit, svect.begin());
+            std::ptrdiff_t	fdist = std::distance(fit, fvect.begin());
+            std::cout << sdist << "\t" << fdist << std::endl;
+            sit = 1 + sit;
+            fit = 1 + fit;
+            sit = sit - 1;
+            fit = fit - 1;
+            sit = sit + 1;
+            fit = fit + 1;
+        }
     }
 
 //    {
@@ -2470,8 +2471,8 @@ int			main(int ac, char **av)
     ft::vector<std::string> asdf(12, "asdf");
     std::vector<std::string> sadf(12, "sdf");
     const ft::vector<std::string> fcont(sadf.begin(), sadf.end());
-
-        //fcont.rend();
+    ft_vector_tests(ac, av);
+        fcont.rend();
     //	a lot of data test: requires more than 320mb of ram with valgrind memcheck
     //	and more than 640mb of ram with -fsanitize=address (asan + lsan on linux)
     //	changing INSANITYSIZE changes ram usage accordingly

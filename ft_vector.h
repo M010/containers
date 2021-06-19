@@ -1,5 +1,9 @@
 #pragma once
+#include <iterator>
+#include <stdexcept>
+#include <limits>
 
+namespace ft {
 template<class InputIterator1, class InputIterator2>
 bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2) {
     while (first1 != last1) {
@@ -21,6 +25,7 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
         ++first2;
     }
     return (first2 != last2);
+}
 }
 
 template<bool B, class T = void>
@@ -44,7 +49,12 @@ class vector {
     typedef typename allocator_type::const_pointer const_pointer;
 
 
-    class iterator {
+ class iterator :
+     public std::iterator<std::random_access_iterator_tag,
+                            value_type,
+                            ptrdiff_t,
+                            pointer,
+                            reference>{
      public:
         typedef int      difference_type;
         typedef iterator self_type;
@@ -83,14 +93,14 @@ class vector {
 
         friend const self_type& operator+(difference_type rhs, const self_type& lhs) {
             self_type tmp = lhs;
-            return lhs += rhs;
+            return tmp += rhs;
         }
 
         const self_type &operator-(difference_type n) {
             self_type tmp = *this;
             return tmp -= n;
         }
-        difference_type operator-(self_type rhs) { return this->ptr_ - rhs->ptr_; } // TODO :: test?
+        difference_type operator-(self_type rhs) { return this->ptr_ - rhs.ptr_; } // TODO :: test?
         const value_type &operator[](difference_type n) { return *(*this + n); };
         value_type &operator[](difference_type n) const { return *(*this + n); };
 
@@ -106,7 +116,12 @@ class vector {
      private:
         pointer ptr_;
     };
-    class const_iterator {
+    class const_iterator : public std::iterator<std::random_access_iterator_tag,
+                                                value_type,
+                                                ptrdiff_t,
+                                                pointer,
+                                                reference>
+        {
      public:
         typedef int            difference_type;
         typedef const_iterator self_type;
@@ -264,6 +279,7 @@ class vector {
         pointer pos = &(*position);
         _destroy_one(pos);
         _move_in_place(pos, pos + 1, &(*(this->end())));
+        return pos;
     }
 
     iterator erase(iterator first, iterator last) {
@@ -419,6 +435,7 @@ class vector {
         std::swap(tmp.size_, size_);
         std::swap(tmp.capacity_, capacity_);
         this->assign(other.begin(), other.end());
+        return *this;
     }
 /*
  *  Compare
@@ -427,11 +444,11 @@ class vector {
     friend bool operator==(const vector &lhs, const vector &rhs) {
         if (lhs.size() != rhs.size())
             return false;
-        return equal(lhs.begin(), lhs.end(), rhs.begin());
+        return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
     }
 
     friend bool operator<(const vector &lhs, const vector &rhs) {
-        return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
     }
 
     friend bool operator!=(const vector &lhs, const vector &rhs) {
