@@ -23,6 +23,18 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
     }
     return (first2 != last2);
 }
+
+	template<class iterator>
+	iterator prev(iterator it) {
+		it--;
+		return it;
+	}
+
+	template<class iterator>
+	iterator next(iterator it) {
+		it++;
+		return it;
+	}
 }
 
 template<bool B, class T = void>

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <limits>
 #include <iostream>
+#include <cstddef>
 #include "utils.h"
 
 namespace ft {
@@ -326,12 +327,11 @@ class vector {
     }
 
     reference back() {
-        iterator it = end();
-        return *(--it);
+        return *prev(end());
     }
 
     const_reference back() const {
-        return *(end() - 1);
+        return *(prev(end()));
     }
 /*
  *  Capacity
@@ -392,19 +392,19 @@ class vector {
     }
 
     reverse_iterator rbegin() {
-        return std::reverse_iterator<iterator>(begin());
+        return std::reverse_iterator<iterator>(prev(end()));
     }
 
     reverse_iterator rend() {
-        return std::reverse_iterator<iterator>(end());
+        return std::reverse_iterator<iterator>(prev(begin()));
     }
 
     const_reverse_iterator rbegin() const {
-        return std::reverse_iterator<const_iterator>(begin());
+        return std::reverse_iterator<const_iterator>(prev(begin()));
     }
 
     const_reverse_iterator rend() const {
-        return std::reverse_iterator<const_iterator>(end());
+        return std::reverse_iterator<const_iterator>(prev(end()));
     }
 
 /*

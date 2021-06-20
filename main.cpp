@@ -134,20 +134,20 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
             std::cout << " " << *(fit++);
         std::cout << std::endl;
     }
-//    std::cout << "reverse:" << std::endl;
-//    {
-//        typename Container1::const_reverse_iterator sit = scont.rbegin();
-//        typename Container2::const_reverse_iterator fit = fcont.rbegin();
-//        std::cout << "scont contains: ";
-//        while (sit != scont.rend())
-//            std::cout << " " << *sit++;
-//
-//        std::cout << std::endl << "fcont contains: ";
-//        std::cerr << "TADADADA" << fcont << std::endl;
-//        while (fit != fcont.rend())
-//            std::cerr << " " << *(fit++); //TODO: test
-//        std::cout << std::endl;
-//    }
+    std::cout << "reverse:" << std::endl;
+    {
+        typename Container1::const_reverse_iterator sit = scont.rbegin();
+        typename Container2::const_reverse_iterator fit = fcont.rbegin();
+        std::cout << "scont contains: ";
+        while (sit != scont.rend())
+            std::cout << " " << *sit++;
+
+        std::cout << std::endl << "fcont contains: ";
+        std::cerr << "TADADADA" << fcont << std::endl;
+        while (fit != fcont.rend())
+            std::cerr << " " << *(fit++); //TODO: test
+        std::cout << std::endl;
+    }
 }
 //
 //template <class Key, class T>
@@ -2599,7 +2599,7 @@ void constructor_test() {
         std::vector<std::string> tmp;
 
         for (int                 i = 0; i < 100; i++)
-            tmp.push_back(std::to_string(i));
+            tmp.push_back(test::to_string(i));
         ft::vector<std::string>  vecy(tmp.begin(), tmp.end());
         std::vector<std::string> vecx(tmp.begin(), tmp.end());
 
@@ -2610,7 +2610,7 @@ void constructor_test() {
         ft::vector<std::string> tmp;
 
         for (int                 i = 0; i < 100; i++)
-            tmp.push_back(std::to_string(i));
+            tmp.push_back(test::to_string(i));
         ft::vector<std::string>  vecy(tmp.begin(), tmp.end());
         std::vector<std::string> vecx(tmp.begin(), tmp.end());
 
@@ -2622,8 +2622,8 @@ void constructor_test() {
         std::vector<std::string> stmp;
 
         for (int i = 0; i < 100; i++) {
-            tmp.push_back(std::to_string(i));
-            stmp.push_back(std::to_string(i));
+            tmp.push_back(test::to_string(i));
+            stmp.push_back(test::to_string(i));
         }
         ft::vector<std::string>  vecy(tmp.begin(), tmp.end());
         std::vector<std::string> vecx(tmp.begin(), tmp.end());
@@ -2706,8 +2706,8 @@ void iterator_test() {
         std::vector<std::string> svect;
 
         for (int i = 0; i < 1; i++) {
-            fvect.push_back(std::to_string(i));
-            svect.push_back(std::to_string(i));
+            fvect.push_back(test::to_string(i));
+            svect.push_back(test::to_string(i));
         }
 
         ft::vector<std::string>::iterator  fit     = fvect.begin();
@@ -2730,8 +2730,8 @@ void reverse_iterator_test() {
             svect.push_back(i);
         }
 
-        ft::vector<int>::iterator  fit = fvect.begin();
-        std::vector<int>::iterator sit = svect.begin();
+        ft::vector<int>::reverse_iterator fit = fvect.rbegin();
+        std::vector<int>::reverse_iterator sit = svect.rbegin();
 
         for (int i = 0; i < 10; i++) {
             ASSERT_EQUAL(*fit, *sit);
@@ -2749,8 +2749,8 @@ void reverse_iterator_test() {
             svect.push_back(i);
         }
 
-        ft::vector<int>::iterator  fit = fvect.end();
-        std::vector<int>::iterator sit = svect.end();
+        ft::vector<int>::reverse_iterator  fit = fvect.rend();
+        std::vector<int>::reverse_iterator sit = svect.rend();
 
         for (int i = 0; i < 10; i++) {
             fit--;
@@ -2763,15 +2763,15 @@ void reverse_iterator_test() {
         ft::vector<int>  fvect;
         std::vector<int> svect;
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 10; i++) {
             fvect.push_back(i);
             svect.push_back(i);
         }
 
-        ft::vector<int>::iterator  fit = fvect.begin();
-        std::vector<int>::iterator sit = svect.begin();
+        ft::vector<int>::reverse_iterator  fit = fvect.rbegin();
+        std::vector<int>::reverse_iterator sit = svect.rbegin();
 
-        for (; fit != fvect.end(); fit++, sit++) {
+        for (; fit != fvect.rend(); fit++, sit++) {
             ASSERT_EQUAL(*fit, *sit);
         }
     }
@@ -2780,15 +2780,15 @@ void reverse_iterator_test() {
         ft::vector<std::string>  fvect;
         std::vector<std::string> svect;
 
-        for (int i = 0; i < 1; i++) {
-            fvect.push_back(std::to_string(i));
-            svect.push_back(std::to_string(i));
+        for (int i = 0; i < 10; i++) {
+            fvect.push_back(test::to_string(i));
+            svect.push_back(test::to_string(i));
         }
 
-        ft::vector<std::string>::iterator  fit     = fvect.begin();
-        std::vector<std::string>::iterator sit     = svect.begin();
+        ft::vector<std::string>::reverse_iterator  fit     = fvect.rbegin();
+        std::vector<std::string>::reverse_iterator sit     = svect.rbegin();
 
-        for (; sit != svect.end(); fit++, sit++) {
+        for (; sit != svect.rend(); fit++, sit++) {
             ASSERT_EQUAL(*fit, *sit);
         }
     }
@@ -2797,13 +2797,22 @@ void reverse_iterator_test() {
 void test_all() {
     TestRunner tr;
     RUN_TEST(tr, iterator_test);
-    RUN_TEST(tr, reserve_test);
+	RUN_TEST(tr, reverse_iterator_test);
+	RUN_TEST(tr, reserve_test);
     RUN_TEST(tr, constructor_test);
     RUN_TEST(tr, push_back_test);
 }
-
+#include <algorithm>
 int main(int ac, char **av) {
-    test_all();
+
+
+	ft::vector<int> a;
+	for(int i = 1 ; i < 10; i++)
+		a.push_back(i);
+
+	std::cerr << a
+	<< endl <<*(a.rend()) << endl;
+			  test_all();
 
     //ft::vector<std::string> tmp(3, "hi");
     //std::cout << tmp << std::endl;
@@ -2818,5 +2827,6 @@ int main(int ac, char **av) {
     //	a lot of data test: requires more than 320mb of ram with valgrind memcheck
     //	and more than 640mb of ram with -fsanitize=address (asan + lsan on linux)
     //	changing INSANITYSIZE changes ram usage accordingly
+
     return (0);
 }
