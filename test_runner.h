@@ -7,12 +7,32 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "ft_vector.h"
+#include "utils.h"
 
-using namespace std;
+using std::ostream;
+using std::string;
+using std::endl;
+using std::cerr;
+
+template<class T>
+bool operator==(const std::vector<T> lhs, const ft::vector<T> rhs){
+    if(lhs.size() != rhs.size())
+        return false;
+    return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template<class T>
+bool operator==(const ft::vector<T> lhs, const std::vector<T> rhs){
+    if(lhs.size() != rhs.size())
+        return false;
+    return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
 
 template <class T>
-ostream& operator << (ostream& os, const vector<T>& s) {
-    os << "{";
+ostream& operator << (ostream& os, const std::vector<T>& s) {
+    os << "!size: " << s.size() << " capacity: "<< s.capacity() << "{";
     bool first = true;
     for (const auto& x : s) {
         if (!first) {
@@ -25,7 +45,21 @@ ostream& operator << (ostream& os, const vector<T>& s) {
 }
 
 template <class T>
-ostream& operator << (ostream& os, const set<T>& s) {
+ostream& operator << (ostream& os, const ft::vector<T>& s) {
+    os << "!size: " << s.size() << " capacity: "<< s.capacity() << "{";
+    bool first = true;
+    for (const auto& x : s) {
+        if (!first) {
+            os << ", ";
+        }
+        first = false;
+        os << x;
+    }
+    return os << "}!";
+}
+
+template <class T>
+ostream& operator << (ostream& os, const std::set<T>& s) {
     os << "{";
     bool first = true;
     for (const auto& x : s) {
@@ -39,7 +73,7 @@ ostream& operator << (ostream& os, const set<T>& s) {
 }
 
 template <class K, class V>
-ostream& operator << (ostream& os, const map<K, V>& m) {
+ostream& operator << (ostream& os, const std::map<K, V>& m) {
     os << "{";
     bool first = true;
     for (const auto& kv : m) {
@@ -55,12 +89,12 @@ ostream& operator << (ostream& os, const map<K, V>& m) {
 template<class T, class U>
 void AssertEqual(const T& t, const U& u, string hint = "") {
     if (!(t == u)) {
-        ostringstream os;
+        std::ostringstream os;
         os << "Assertion failed: " << t << " != " << u;
         if (!hint.empty()) {
             os << " hint: " << hint;
         }
-        throw runtime_error(os.str());
+        throw std::runtime_error(os.str());
     }
 }
 
@@ -74,10 +108,10 @@ public:
     void RunTest(TestFunc func, const string& test_name) {
         try {
             func();
-            cerr << test_name << " OK" << endl;
-        } catch (exception& e) {
+            std::cerr << test_name << " OK" << std::endl;
+        } catch (std::exception& e) {
             ++fail_count;
-            cerr << test_name << " fail: " << e.what() << endl;
+            std::cerr << test_name << " fail: " << e.what() << std::endl;
         } catch (...) {
             ++fail_count;
             cerr << "Unknown exception caught" << endl;
@@ -96,14 +130,14 @@ private:
 };
 
 #define ASSERT_EQUAL(x, y) {            \
-  ostringstream os;                     \
+  std::ostringstream os;                \
   os << #x << " != " << #y << ", "      \
     << __FILE__ << ":" << __LINE__;     \
   AssertEqual(x, y, os.str());          \
 }
 
 #define ASSERT(x) {                     \
-  ostringstream os;                     \
+  std::ostringstream os;                     \
   os << #x << " is false, "             \
     << __FILE__ << ":" << __LINE__;     \
   Assert(x, os.str());                  \
