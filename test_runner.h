@@ -15,6 +15,19 @@ using std::string;
 using std::endl;
 using std::cerr;
 
+class ostringstream;
+namespace test
+{
+	template<class T>
+	std::string to_string(const T& val)
+	{
+		std::ostringstream stream;
+		stream << val;
+		return stream.str();
+	}
+}
+
+
 template<class T>
 bool operator==(const std::vector<T> lhs, const ft::vector<T> rhs){
     if(lhs.size() != rhs.size())
@@ -34,12 +47,12 @@ template <class T>
 ostream& operator << (ostream& os, const std::vector<T>& s) {
     os << "!size: " << s.size() << " capacity: "<< s.capacity() << "{";
     bool first = true;
-    for (const auto& x : s) {
+    for (typename std::vector<T>::const_iterator x = s.begin(); x != s.end(); x++) {
         if (!first) {
             os << ", ";
         }
         first = false;
-        os << x;
+        os << *x;
     }
     return os << "}";
 }
@@ -48,12 +61,12 @@ template <class T>
 ostream& operator << (ostream& os, const ft::vector<T>& s) {
     os << "!size: " << s.size() << " capacity: "<< s.capacity() << "{";
     bool first = true;
-    for (const auto& x : s) {
+	for (typename ft::vector<T>::const_iterator x = s.begin(); x != s.end(); x++) {
         if (!first) {
             os << ", ";
         }
         first = false;
-        os << x;
+        os << *x;
     }
     return os << "}!";
 }
@@ -62,12 +75,12 @@ template <class T>
 ostream& operator << (ostream& os, const std::set<T>& s) {
     os << "{";
     bool first = true;
-    for (const auto& x : s) {
+	for (typename std::set<T>::const_iteratror x = s.begin(); x != s.end(); x++) {
         if (!first) {
             os << ", ";
         }
         first = false;
-        os << x;
+        os << *x;
     }
     return os << "}";
 }
@@ -76,12 +89,12 @@ template <class K, class V>
 ostream& operator << (ostream& os, const std::map<K, V>& m) {
     os << "{";
     bool first = true;
-    for (const auto& kv : m) {
+	for (typename std::map<K, V>::iteratror kv = m.begin(); kv != m.end(); kv++) {
         if (!first) {
             os << ", ";
         }
         first = false;
-        os << kv.first << ": " << kv.second;
+        os << kv->first << ": " << kv->second;
     }
     return os << "}";
 }
@@ -104,8 +117,9 @@ inline void Assert(bool b, const string& hint) {
 
 class TestRunner {
 public:
+    	TestRunner():fail_count(0){};
     template <class TestFunc>
-    void RunTest(TestFunc func, const string& test_name) {
+    void RunTest(TestFunc func, const string& test_name)  {
         try {
             func();
             std::cerr << test_name << " OK" << std::endl;
@@ -126,7 +140,7 @@ public:
     }
 
 private:
-    int fail_count = 0;
+    int fail_count;
 };
 
 #define ASSERT_EQUAL(x, y) {            \
