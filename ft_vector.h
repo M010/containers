@@ -30,25 +30,25 @@ class vector {
         typedef iterator self_type;
         iterator() : ptr_(NULL) {}
         iterator(pointer ptr) : ptr_(ptr) {}
-        self_type operator++() {
-            self_type i = *this;
-            ptr_++;
-            return i;
-        }
-        self_type operator++(int junk) {
-            ptr_++;
-            return *this;
-        }
-        self_type operator--() {
-            self_type i = *this;
-            ptr_--;
-            return i;
-        }
-        self_type operator--(int junk) {
-            ptr_--;
-            return *this;
-        }
-        const self_type &operator+=(difference_type n) {
+        self_type& operator++() {
+			ptr_++;
+			return *this;
+		}
+		self_type operator++(int) {
+			self_type i = *this;
+			ptr_++;
+			return i;
+		}
+		self_type operator--() {
+			ptr_--;
+			return *this;
+		}
+		self_type operator--(int) {
+			self_type i = *this;
+			ptr_--;
+			return i;
+		}
+		const self_type &operator+=(difference_type n) {
             ptr_ += n;
             return *this;
         }
@@ -97,24 +97,26 @@ class vector {
 
         const_iterator() : ptr_(NULL) {}
         const_iterator(pointer ptr) : ptr_(ptr) {}
-        self_type operator++() {
-            self_type i = *this;
-            ptr_++;
-            return i;
-        }
-        self_type operator++(int junk) {
-            ptr_++;
-            return *this;
-        }
-        self_type operator--() {
-            self_type i = *this;
-            ptr_--;
-            return i;
-        }
-        self_type operator--(int junk) {
-            ptr_--;
-            return *this;
-        }
+
+		self_type& operator++() {
+			ptr_++;
+			return *this;
+		}
+		self_type operator++(int) {
+			self_type i = *this;
+			ptr_++;
+			return i;
+		}
+		self_type& operator--() {
+			ptr_--;
+			return *this;
+		}
+		self_type operator--(int) {
+			self_type i = *this;
+			ptr_--;
+			return i;
+		}
+
         const self_type &operator+=(difference_type n) {
             ptr_ += n;
             return *this;
@@ -138,7 +140,6 @@ class vector {
         }
 
         difference_type operator-(self_type rhs) { return this->ptr_ - rhs.ptr_; } // TODO :: test?
-        const value_type &operator[](difference_type n) { return *(*this + n); };
         const value_type &operator[](difference_type n) const { return *(*this + n); };
 
         const_reference operator*() { return *ptr_; }
@@ -268,30 +269,41 @@ class vector {
     iterator erase(iterator first, iterator last) {
         _destroy_array(&(*first), &(*last));
         pointer pos = &(*last);
-        _move_in_place(pos, pos + 1, &(*(this->end())));
+        _move_in_place(pos, pos + 1, &(*(end())));
         return &(*first);
     }
 
     //single element (1)
     iterator insert(iterator position, const value_type &val) {
+    	ptrdiff_t element_index = position - begin();
         this->reserve(size() + 1);
-        pointer pos = &(*position);
-        _move_in_place(pos, pos + 1, data_ + size());
+        pointer pos = data_ + element_index ;
+        _move_in_place(pos + 1, pos, data_ + size());
         _construct_one(pos, val);
+        size_++;
         return pos;
     }
 
     //fill (2)
     void insert(iterator position, size_type n, const value_type &val) {
-        this->reserve(size() + n);
-        pointer start_position = &(*position);
+		ptrdiff_t element_index =  position - begin();
+		this->reserve(size() + n);
+        pointer start_position = data_ + element_index;
         _move_in_place(start_position + n, start_position, &(*end()));
         _construct_n(start_position, n, val);
+        size_ += n;
     }
     //range (3)
     template<class InputIterator>
-    void insert(iterator position, InputIterator first, InputIterator last) {
-        return; // TODO:
+    void insert(iterator position, InputIterator first, InputIterator last,
+				typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0) {
+    	ptrdiff_t n = std::distance(first, last); //TODO: remove std::
+		ptrdiff_t element_index =  position - begin();
+		this->reserve(size() + n);
+		pointer start_position = data_ + element_index;
+		_move_in_place(start_position + n, start_position, &(*end()));
+		for(pointer walker = start_position; first != last; walker++ ,first++)
+			_construct_one(walker, *first);
     }
 
 /*
@@ -367,7 +379,7 @@ class vector {
 
     void resize(size_type n, value_type val = value_type()) {
         this->reserve(n);
-        _construct_array(&data_[size_], &data_[n]);
+        _construct_array(&data_[size_], &data_[n], val);
         _destroy_array(&data_[n], &data_[size_]);
         size_ = n;
     }
@@ -392,19 +404,19 @@ class vector {
     }
 
     reverse_iterator rbegin() {
-        return std::reverse_iterator<iterator>(prev(end()));
+        return std::reverse_iterator<iterator>(end());
     }
 
     reverse_iterator rend() {
-        return std::reverse_iterator<iterator>(prev(begin()));
+        return std::reverse_iterator<iterator>(begin());
     }
 
     const_reverse_iterator rbegin() const {
-        return std::reverse_iterator<const_iterator>(prev(begin()));
+        return std::reverse_iterator<const_iterator>(end());
     }
 
     const_reverse_iterator rend() const {
-        return std::reverse_iterator<const_iterator>(prev(end()));
+        return std::reverse_iterator<const_iterator>(begin());
     }
 
 /*
@@ -471,7 +483,7 @@ class vector {
     }
 
     void _move(pointer dst, pointer start, pointer end) {
-        if (end < start)
+        if (end <= start)
             return;
         for (pointer walker = start; walker < end; walker++, dst++) {
             _construct_one(dst, *walker);
@@ -480,12 +492,12 @@ class vector {
     }
 
     void _move_in_place(pointer dst, pointer start, pointer end) {
-        if (end < start)
+        if (end <= start)
             return;
         if (dst < start) {
             _move(dst, start, end);
         }
-        for (size_type dist = end - start; dist >= 0; dist--) {
+        for (ptrdiff_t dist = end - start - 1; dist >= 0; dist--) {
             _construct_one(&(dst[dist]), start[dist]);
             _destroy_one(&(start[dist]));
         }

@@ -2,6 +2,7 @@
 
 #include <sstream>
 #include <stdexcept>
+#include <stdlib.h>
 #include <iostream>
 #include <map>
 #include <set>
