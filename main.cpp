@@ -1164,34 +1164,25 @@ void ft_vector_tests() {
         ASSERT_EQUAL(svect, fvect);
 
         // erase the 6th element
+        ASSERT_EQUAL(svect, fvect);
         sit = svect.erase(svect.begin() + 5);
         fit = fvect.erase(fvect.begin() + 5);
-        if (*sit != *fit)
-            error_exception();
-        printcontainer("svect", svect);
-        printcontainer("fvect", fvect);
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
+        //error
+        ASSERT_EQUAL(*sit, *fit);
         ASSERT_EQUAL(svect, fvect);
 
         // erase the first 3 elements:
         svect.erase(svect.begin(), svect.begin() + 3);
         fvect.erase(fvect.begin(), fvect.begin() + 3);
-        printcontainer("svect", svect);
-        printcontainer("fvect", fvect);
         std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         svect.erase(svect.end() - 4, svect.end() - 1);
         fvect.erase(fvect.end() - 4, fvect.end() - 1);
-        printcontainer("svect", svect);
-        printcontainer("fvect", fvect);
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         svect.erase(svect.begin(), svect.end());
         fvect.erase(fvect.begin(), fvect.end());
-        printcontainer("svect", svect);
-        printcontainer("fvect", fvect);
         std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
     }
@@ -2857,10 +2848,10 @@ void test_all() {
 	RUN_TEST(tr, insert_test);
 	RUN_TEST(tr, ft_vector_tests);
 }
-#include <algorithm>
+
 int main(int ac, char **av) {
-	ft_vector_tests();
 	test_all();
+    ft_vector_tests();
 
 	ft::vector<std::string> f;
 	std::vector<std::string> s;

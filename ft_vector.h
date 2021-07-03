@@ -60,12 +60,10 @@ class vector {
             self_type tmp = *this;
             return tmp += n;
         }
-
         friend const self_type &operator+(difference_type rhs, const self_type &lhs) {
             self_type tmp = lhs;
             return tmp += rhs;
         }
-
         const self_type &operator-(difference_type n) {
             self_type tmp = *this;
             return tmp -= n;
@@ -98,10 +96,7 @@ class vector {
         const_iterator() : ptr_(NULL) {}
         const_iterator(pointer ptr) : ptr_(ptr) {}
 
-		self_type& operator++() {
-			ptr_++;
-			return *this;
-		}
+		self_type& operator++() { ptr_++; return *this;}
 		self_type operator++(int) {
 			self_type i = *this;
 			ptr_++;
@@ -141,10 +136,8 @@ class vector {
 
         difference_type operator-(self_type rhs) { return this->ptr_ - rhs.ptr_; } // TODO :: test?
         const value_type &operator[](difference_type n) const { return *(*this + n); };
-
         const_reference operator*() { return *ptr_; }
         const_pointer operator->() { return ptr_; }
-
         bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
         bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
         bool operator<(const self_type &rhs) const { return ptr_ < rhs.ptr_; }
@@ -263,13 +256,15 @@ class vector {
         pointer pos = &(*position);
         _destroy_one(pos);
         _move_in_place(pos, pos + 1, &(*(this->end())));
+        size_--;
         return pos;
     }
 
     iterator erase(iterator first, iterator last) {
+        ptrdiff_t n = last - first;
         _destroy_array(&(*first), &(*last));
-        pointer pos = &(*last);
-        _move_in_place(pos, pos + 1, &(*(end())));
+        _move_in_place(&(*first), &(*last), &(*(end())));
+        size_ -= n;
         return &(*first);
     }
 
@@ -297,7 +292,7 @@ class vector {
     template<class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last,
 				typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0) {
-    	ptrdiff_t n = std::distance(first, last); //TODO: remove std::
+    	ptrdiff_t n = std::distance(first, last);
 		ptrdiff_t element_index =  position - begin();
 		this->reserve(size() + n);
 		pointer start_position = data_ + element_index;
@@ -339,11 +334,11 @@ class vector {
     }
 
     reference back() {
-        return *prev(end());
+        return *(ft_prev(end()));
     }
 
     const_reference back() const {
-        return *(prev(end()));
+        return *(ft_prev(end()));
     }
 /*
  *  Capacity
@@ -496,6 +491,7 @@ class vector {
             return;
         if (dst < start) {
             _move(dst, start, end);
+            return;
         }
         for (ptrdiff_t dist = end - start - 1; dist >= 0; dist--) {
             _construct_one(&(dst[dist]), start[dist]);
