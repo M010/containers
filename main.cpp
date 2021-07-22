@@ -1,4 +1,6 @@
+#include "ft_map.h"
 #include "ft_vector.h"
+
 #include "test_runner.h"
 #include <iostream>
 #include <sstream>
@@ -2847,24 +2849,68 @@ void insert_test()
 	}
 }
 
-void test_all() {
-    TestRunner tr;
-    RUN_TEST(tr, iterator_test);
+void all_vector_tests(TestRunner& tr)
+{
+	RUN_TEST(tr, iterator_test);
 	RUN_TEST(tr, reverse_iterator_test);
 	RUN_TEST(tr, reserve_test);
-    RUN_TEST(tr, constructor_test);
-    RUN_TEST(tr, push_back_test);
+	RUN_TEST(tr, constructor_test);
+	RUN_TEST(tr, push_back_test);
 	RUN_TEST(tr, insert_test);
 	RUN_TEST(tr, ft_vector_tests);
 }
+
+void test_all() {
+    TestRunner tr;
+    //all_vector_tests(tr);
+}
+
+struct Cry
+{
+	std::string name;
+	Cry() :name("Empty"){std::cerr<< "cry " << name <<std::endl;}
+	Cry(const std::string &name): name(name)
+	{
+		std::cerr<< "cry name " << this->name <<std::endl;}
+	Cry(const Cry& cry) {
+		this->name = "[" + cry.name + "]";
+		std::cerr<< "copy cry!" << this->name << std::endl;
+	}
+	void operator=(const Cry& cry) {std::cerr<<  this->name << " = " << cry.name<< std::endl;}
+	~Cry() {std::cerr<< "~cry " << name <<std::endl;}
+};
+
 #include <algorithm>
 int main(int ac, char **av) {
-	ft_vector_tests();
 	test_all();
-
-	ft::vector<std::string> f;
-	std::vector<std::string> s;
-
+	ft::map<int, int> test;
+	typedef ft::map<int, int>::iterator map_iter;
+	std::vector<map_iter> iters;
+	srand(time(0));
+	for(int i = 0; i < 10; i++)
+	{
+		iters.push_back(test.insert(rand() % 100));
+	}
+	test.print_map();
+	test.raw_print();
+	std::cout << std::endl;
+	//for(int i = 0; i < iters.size(); i++)
+	//{
+	//	map_iter it = iters[i];
+	//	std::cerr << *it <<  " " << *(++it) << std::endl;
+	//}
+	map_iter min_it = iters.front();
+	for(int i = 0; i < iters.size(); i++)
+	{
+		if(*min_it > *(iters[i]))
+			min_it = iters[i];
+	}
+	map_iter empt;
+	while (min_it != empt)
+	{
+		std::cerr << *min_it << " ";
+		++min_it;
+	}
     //ft::vector<std::string> tmp(3, "hi");
     //std::cout << tmp << std::endl;
     //	common stuff
@@ -2877,6 +2923,7 @@ int main(int ac, char **av) {
     //	a lot of data test: requires more than 320mb of ram with valgrind memcheck
     //	and more than 640mb of ram with -fsanitize=address (asan + lsan on linux)
     //	changing INSANITYSIZE changes ram usage accordingly
-
+    std::map<int, Cry> set;
+	set[1] = Cry("vasya");
     return (0);
 }

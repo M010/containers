@@ -35,6 +35,22 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 		it++;
 		return it;
 	}
+	template<typename Itr>
+	class reverse_iterator {
+		Itr itr;
+	public:
+		explicit reverse_iterator(Itr itr): itr(itr) {}
+		typename Itr::value& operator*() {
+			return *ft::prev(itr);
+		}
+		typename Itr::value& operator++() {
+			--itr;
+			return *this;
+		}
+		friend bool operator!=(reverse_iterator<Itr> a, reverse_iterator<Itr> b) {
+			return a.itr != b.itr;
+		}
+	};
 }
 
 template<bool B, class T = void>
