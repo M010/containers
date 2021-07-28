@@ -2884,46 +2884,68 @@ struct Cry
 int main(int ac, char **av) {
 	test_all();
 	ft::map<int, int> test;
-	typedef ft::map<int, int>::iterator map_iter;
-	std::vector<map_iter> iters;
-	srand(time(0));
-	for(int i = 0; i < 10; i++)
-	{
-		iters.push_back(test.insert(rand() % 100));
-	}
+	test.insert(8);
+	test.insert(3);
+	test.insert(10);
+	test.insert(1);
+	test.insert(6);
+	test.insert(14);
+	test.insert(4);
+	test.insert(7);
+	test.insert(13);
 	test.print_map();
 	test.raw_print();
-	std::cout << std::endl;
+	std::cout << "--------------------------------------" << std::endl;
+	test.delete_elem(8);
+	test.print_map();
+	test.raw_print();
+	//typedef ft::map<int, int>::iterator map_iter;
+	//std::vector<map_iter> iters;
+	//srand(time(0));
+	//for(int i = 0; i < 10; i++)
+	//{
+	//	iters.push_back(test.insert(rand() % 100));
+	//}
+	//test.print_map();
+	//std::cerr << "iter_test:" << endl;
+	//for(map_iter it = test.begin(); it != test.end(); it++)
+	//{
+	//	std::cerr << *it << " " ;
+	//}
+	//std::cerr << endl << "iter_test:end" << endl;
+
+	//test.raw_print();
+	//std::cout << std::endl;
+	////for(int i = 0; i < iters.size(); i++)
+	////{
+	////	map_iter it = iters[i];
+	////	std::cerr << *it <<  " " << *(++it) << std::endl;
+	////}
+	//map_iter min_it = iters.front();
 	//for(int i = 0; i < iters.size(); i++)
 	//{
-	//	map_iter it = iters[i];
-	//	std::cerr << *it <<  " " << *(++it) << std::endl;
+	//	if(*min_it > *(iters[i]))
+	//		min_it = iters[i];
 	//}
-	map_iter min_it = iters.front();
-	for(int i = 0; i < iters.size(); i++)
-	{
-		if(*min_it > *(iters[i]))
-			min_it = iters[i];
-	}
-	map_iter empt;
-	while (min_it != empt)
-	{
-		std::cerr << *min_it << " ";
-		++min_it;
-	}
-    //ft::vector<std::string> tmp(3, "hi");
-    //std::cout << tmp << std::endl;
-    //	common stuff
-    //	iostreamhack();
-    // std::srand(std::time(NULL));
-    // ft::vector<std::string> asdf(12, "asdf");
-    // std::vector<std::string> sadf(12, "sdf");
-    // const ft::vector<std::string> fcont(sadf.begin(), sadf.end());
-    //    fcont.rend();
-    //	a lot of data test: requires more than 320mb of ram with valgrind memcheck
-    //	and more than 640mb of ram with -fsanitize=address (asan + lsan on linux)
-    //	changing INSANITYSIZE changes ram usage accordingly
-    std::map<int, Cry> set;
-	set[1] = Cry("vasya");
+	//map_iter empt;
+	//while (min_it != test.end())
+	//{
+	//	std::cerr << *min_it << " ";
+	//	++min_it;
+	//}
+    ////ft::vector<std::string> tmp(3, "hi");
+    ////std::cout << tmp << std::endl;
+    ////	common stuff
+    ////	iostreamhack();
+    //// std::srand(std::time(NULL));
+    //// ft::vector<std::string> asdf(12, "asdf");
+    //// std::vector<std::string> sadf(12, "sdf");
+    //// const ft::vector<std::string> fcont(sadf.begin(), sadf.end());
+    ////    fcont.rend();
+    ////	a lot of data test: requires more than 320mb of ram with valgrind memcheck
+    ////	and more than 640mb of ram with -fsanitize=address (asan + lsan on linux)
+    ////	changing INSANITYSIZE changes ram usage accordingly
+    std::set<Cry> cr;
+    std::set<Cry>::iterator it;
     return (0);
 }

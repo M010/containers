@@ -10,7 +10,6 @@ namespace ft
 	class rbIterator
 	{
 	public:
-		rbIterator(): _node(NULL){};
 		typedef std::bidirectional_iterator_tag  iterator_category;
 		typedef T        value_type;
 		typedef std::ptrdiff_t difference_type;
@@ -18,8 +17,9 @@ namespace ft
 		typedef value_type& reference;
 		typedef rbIterator<T> 	self_type;
 		typedef Node<value_type> node_type;
+		rbIterator(node_type* node = NULL): _node(node){};
 	private:
-		Node<value_type> * _node;
+		node_type *_node;
 	public:
 		bool operator==(const rbIterator &rhs) const
 		{

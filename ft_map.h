@@ -41,18 +41,22 @@ namespace ft
 
 	private:
 		size_type _size;
-		node_type* _head;
+		node_type* _root;
+		node_type _Tnull;
+		node_type* _most_left;
+		node_type* _most_right;
+
 		void _print(node_type* p, int indent){
-			if(p != NULL) {
-				if(p->right) {
+			if(p != NULL && p->notNull()) {
+				if(p->right->notNull()) {
 					_print(p->right, indent + 4);
 				}
 				if (indent) {
 					std::cout << std::setw(indent) << ' ';
 				}
-				if (p->right) std::cout<<" /\n" << std::setw(indent) << ' ';
-				std::cout<< p->data << "\n ";
-				if(p->left) {
+				if (p->right->notNull()) std::cout<<" /\n" << std::setw(indent) << ' ';
+				std::cout<< p->val() << "\n ";
+				if(p->left->notNull()) {
 					std::cout << std::setw(indent) << ' ' <<" \\\n";
 					_print(p->left, indent + 4);
 				}
@@ -60,39 +64,120 @@ namespace ft
 		}
 
 		node_type* _put(const value_type& val, node_type*& node, node_type* parent = NULL){
-			if(node == NULL){
-				node = new node_type(val, parent);
+			if(node == NULL || !node->notNull()){
+				bool first_insert = !_root;
+				node = new node_type(val, &_Tnull, parent);
+				if(first_insert)
+				{
+					_most_left = node;
+					_most_right = node;
+				} else if(node->val() < _most_left->val()) {
+					_most_left = node;
+				} else if(node->val() > _most_right->val()) {
+					_most_right = node;
+				}
+				_Tnull.left = _Tnull.parent = _most_right;
 				return node;
 			}
-			if(node->data == val) {
-				node->data == val; //TODO: bullshit
+
+			if(node->val() == val) {
+				node->val() == val; //TODO: bullshit
 				return node;
 			}
-			if(node->data < val)
+			if(node->val() < val)
 				_put(val, node->right, node);
 			else
 				_put(val, node->left, node);
 		}
 	public:
-		map() : _size(0), _head(NULL)
-		{}
-//TODO: delete it
+		map() : _size(0), _root(NULL)
+		{
+			_Tnull = node_type(true);
+		}
+
+		/*
+		 * Iteratror funcs
+		 */
+		iterator begin()
+		{
+			return iterator(_most_left);
+		}
+		iterator end() {
+			return iterator(&_Tnull);
+		}
 		iterator insert(const value_type& val) {
-			_put(val, _head);
+			return iterator(_put(val, _root));
 		}
+
+		//TODO: delete it
+
+		node_type* _find_node(const value_type& val, node_type* start = NULL)
+		{
+
+			if(start == NULL)
+				start = _root;
+			if(!start->notNull() || start->val() == val)
+				return start;
+
+			if(start->val() < val)
+				return _find_node(val, start->right);
+			else
+				return _find_node(val, start->left);
+		}
+
+		node_type* _exclude_node (node_type * node)
+		{
+			//TODO: check if node Is Tnull or null?
+			if(node->left->isNull())
+			{
+				if(node->parent->notNull()) //TODO: What if tnull?
+					node->ParentBranch() = node->right;
+				if(node->right->notNull())
+					node->right->parent = node->parent;
+				node->right = node->parent = node->left = &_Tnull;
+				return node;
+			}
+
+			if(node->right->isNull())
+			{
+				if(node->parent->notNull()) //TODO: What if tnull?
+					node->ParentBranch() = node->left;
+				if(node->right->notNull())
+					node->right->parent = node->left;
+				node->right = node->parent = node->left = &_Tnull;
+				return node;
+			}
+
+			node_type * excluded = _exclude_node(GetMin(node->right));
+			copy_links(node, excluded);
+			if(node == _root)
+				_root = excluded;
+			node->right = node->parent = node->left = &_Tnull;
+			return node;
+		};
+
+		void delete_elem(const value_type& val){
+			node_type* found_elem = _find_node(val);
+			if(!found_elem || found_elem->isNull())
+				return;
+			delete _exclude_node(found_elem);
+		}
+
+
 		void print_map() {
-			_print(_head, 0);
+			_print(_root, 0);
 		}
+
 		void _raw_print(node_type* node){
-			if(node != NULL)
+			if(node->notNull())
 			{
 				_raw_print(node->left);
-				std::cout << node->data << " ";
+				std::cout << node->val() << " ";
 				_raw_print(node->right);
 			}
 		}
 		void raw_print(){
-			_raw_print(_head);
+			_raw_print(_root);
 		}
 //TODO: delete it
 
@@ -104,6 +189,5 @@ namespace ft
 		//range (3)
 		//template <class InputIterator>
 		//void insert (InputIterator first, InputIterator last);
-
 	};
 }
