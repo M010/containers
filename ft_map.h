@@ -45,6 +45,13 @@ namespace ft
 		node_type _Tnull;
 		node_type* _most_left;
 		node_type* _most_right;
+		void _update_Tnull()
+		{
+			node_type * node = _root;
+			_most_left = GetMin(_root);
+			_most_right = GetMax(_root);
+			_Tnull.parent = _most_right;
+		}
 
 		void _print(node_type* p, int indent){
 			if(p != NULL && p->notNull()) {
@@ -106,7 +113,9 @@ namespace ft
 			return iterator(&_Tnull);
 		}
 		iterator insert(const value_type& val) {
-			return iterator(_put(val, _root));
+			iterator ret = iterator(_put(val, _root));
+			_update_Tnull();
+			return ret;
 		}
 
 		//TODO: delete it
@@ -156,11 +165,14 @@ namespace ft
 			return node;
 		};
 
-		void delete_elem(const value_type& val){
+		size_t delete_elem(const value_type& val){
 			node_type* found_elem = _find_node(val);
 			if(!found_elem || found_elem->isNull())
-				return;
+				return 0;
 			delete _exclude_node(found_elem);
+			_update_Tnull();
+			_size--;
+			return 1;
 		}
 
 
