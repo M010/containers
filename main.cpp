@@ -1164,25 +1164,34 @@ void ft_vector_tests() {
         ASSERT_EQUAL(svect, fvect);
 
         // erase the 6th element
-        ASSERT_EQUAL(svect, fvect);
         sit = svect.erase(svect.begin() + 5);
         fit = fvect.erase(fvect.begin() + 5);
-        //error
-        ASSERT_EQUAL(*sit, *fit);
+        if (*sit != *fit)
+            error_exception();
+        printcontainer("svect", svect);
+        printcontainer("fvect", fvect);
+        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         // erase the first 3 elements:
         svect.erase(svect.begin(), svect.begin() + 3);
         fvect.erase(fvect.begin(), fvect.begin() + 3);
+        printcontainer("svect", svect);
+        printcontainer("fvect", fvect);
         std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         svect.erase(svect.end() - 4, svect.end() - 1);
         fvect.erase(fvect.end() - 4, fvect.end() - 1);
+        printcontainer("svect", svect);
+        printcontainer("fvect", fvect);
+        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         svect.erase(svect.begin(), svect.end());
         fvect.erase(fvect.begin(), fvect.end());
+        printcontainer("svect", svect);
+        printcontainer("fvect", fvect);
         std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
     }
@@ -2838,23 +2847,70 @@ void insert_test()
 	}
 }
 
-void test_all() {
-    TestRunner tr;
-    RUN_TEST(tr, iterator_test);
+void all_vector_tests(TestRunner& tr)
+{
+	RUN_TEST(tr, iterator_test);
 	RUN_TEST(tr, reverse_iterator_test);
 	RUN_TEST(tr, reserve_test);
-    RUN_TEST(tr, constructor_test);
-    RUN_TEST(tr, push_back_test);
+	RUN_TEST(tr, constructor_test);
+	RUN_TEST(tr, push_back_test);
 	RUN_TEST(tr, insert_test);
 	RUN_TEST(tr, ft_vector_tests);
 }
 
+void test_all() {
+    TestRunner tr;
+    //all_vector_tests(tr);
+}
+
+struct Cry
+{
+	std::string name;
+	Cry() :name("Empty"){std::cerr<< "cry " << name <<std::endl;}
+	Cry(const std::string &name): name(name)
+	{
+		std::cerr<< "cry name " << this->name <<std::endl;}
+	Cry(const Cry& cry) {
+		this->name = "[" + cry.name + "]";
+		std::cerr<< "copy cry!" << this->name << std::endl;
+	}
+	void operator=(const Cry& cry) {std::cerr<<  this->name << " = " << cry.name<< std::endl;}
+	~Cry() {std::cerr<< "~cry " << name <<std::endl;}
+};
+
+#include <algorithm>
 int main(int ac, char **av) {
 	test_all();
-    ft_vector_tests();
-
-	ft::vector<std::string> f;
-	std::vector<std::string> s;
+	ft::map<int, int> test;
+	test.insert(8);
+	test.insert(3);
+	test.insert(10);
+	test.insert(1);
+	test.insert(6);
+	test.insert(14);
+	test.insert(4);
+	test.insert(7);
+	test.insert(13);
+	test.print_map();
+	test.raw_print();
+	std::cout << "--------------------------------------" << std::endl;
+	test.delete_elem(8);
+	test.print_map();
+	test.raw_print();
+	//typedef ft::map<int, int>::iterator map_iter;
+	//std::vector<map_iter> iters;
+	//srand(time(0));
+	//for(int i = 0; i < 10; i++)
+	//{
+	//	iters.push_back(test.insert(rand() % 100));
+	//}
+	//test.print_map();
+	//std::cerr << "iter_test:" << endl;
+	//for(map_iter it = test.begin(); it != test.end(); it++)
+	//{
+	//	std::cerr << *it << " " ;
+	//}
+	//std::cerr << endl << "iter_test:end" << endl;
 
     //ft::vector<std::string> tmp(3, "hi");
     //std::cout << tmp << std::endl;
