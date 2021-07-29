@@ -25,7 +25,7 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 }
 
 	template<class iterator>
-	iterator ft_prev(iterator it) {
+	iterator prev(iterator it) {
 		return --it;
 	}
 

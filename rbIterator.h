@@ -20,7 +20,12 @@ namespace ft
 		rbIterator(node_type* node = NULL): _node(node){};
 	private:
 		node_type *_node;
-	public:
+     public:
+
+        node_type *GetNode() const {
+            return _node;
+        }
+
 		bool operator==(const rbIterator &rhs) const
 		{
 			return _node == rhs._node;

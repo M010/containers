@@ -324,7 +324,7 @@ class vector {
             throw std::out_of_range("vector");
         return (*this)[n];
     }
-
+//TODO: maybe front is not in container
     reference front() {
         return *begin();
     }
@@ -334,11 +334,11 @@ class vector {
     }
 
     reference back() {
-        return *(ft_prev(end()));
+        return *(rend());
     }
 
     const_reference back() const {
-        return *(ft_prev(end()));
+        return *(rend());
     }
 /*
  *  Capacity

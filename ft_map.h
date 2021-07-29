@@ -2,6 +2,7 @@
 #include "pair.h"
 #include "Node.h"
 #include "rbIterator.h"
+#include "utils.h"
 #include <functional>
 #include <memory>
 #include <cstddef>
@@ -42,15 +43,15 @@ namespace ft
 	private:
 		size_type _size;
 		node_type* _root;
-		node_type _Tnull;
+		node_type _Leaf;
 		node_type* _most_left;
 		node_type* _most_right;
-		void _update_Tnull()
+
+		void _update_Leaf()
 		{
-			node_type * node = _root;
 			_most_left = GetMin(_root);
 			_most_right = GetMax(_root);
-			_Tnull.parent = _most_right;
+            _Leaf.parent = _most_right;
 		}
 
 		void _print(node_type* p, int indent){
@@ -70,38 +71,42 @@ namespace ft
 			}
 		}
 
-		node_type* _put(const value_type& val, node_type*& node, node_type* parent = NULL){
-			if(node == NULL || !node->notNull()){
-				bool first_insert = !_root;
-				node = new node_type(val, &_Tnull, parent);
+		ft::pair<node_type*, bool> _put(const value_type& val, node_type*& curr, node_type* parent = NULL){
+		    //TODO: parrent is Tnull?
+			if(curr == NULL || curr->isNull()){
+				bool first_insert = !_root || _root->isNull();
+                curr = new node_type(val, &_Leaf, parent);
 				if(first_insert)
 				{
-					_most_left = node;
-					_most_right = node;
-				} else if(node->val() < _most_left->val()) {
-					_most_left = node;
-				} else if(node->val() > _most_right->val()) {
-					_most_right = node;
+					_most_left = curr;
+					_most_right = curr;
+				} else if(curr->val() < _most_left->val()) {
+					_most_left = curr;
+				} else if(curr->val() > _most_right->val()) {
+					_most_right = curr;
 				}
-				_Tnull.left = _Tnull.parent = _most_right;
-				return node;
+                _Leaf.left = _Leaf.parent = _most_right; //TODO:
+				_size++;
+				return make_pair(curr, true);
 			}
 
-			if(node->val() == val) {
-				node->val() == val; //TODO: bullshit
-				return node;
-			}
-			if(node->val() < val)
-				_put(val, node->right, node);
-			else
-				_put(val, node->left, node);
+			if(curr->val() < val)
+                return _put(val, curr->right, curr);
+			else if( val < curr->val() )
+                return _put(val, curr->left, curr);
+            return make_pair(curr, false);
 		}
+
 	public:
 		map() : _size(0), _root(NULL)
 		{
-			_Tnull = node_type(true);
+            _Leaf = node_type(true);
 		}
 
+		size_type size()
+		{
+            return _size;
+		}
 		/*
 		 * Iteratror funcs
 		 */
@@ -110,11 +115,11 @@ namespace ft
 			return iterator(_most_left);
 		}
 		iterator end() {
-			return iterator(&_Tnull);
+			return iterator(&_Leaf);
 		}
-		iterator insert(const value_type& val) {
-			iterator ret = iterator(_put(val, _root));
-			_update_Tnull();
+		iterator _insert(const value_type& val) {
+			iterator ret = iterator(_put(val, _root).first);
+            _update_Leaf();
 			return ret;
 		}
 
@@ -139,21 +144,25 @@ namespace ft
 			//TODO: check if node Is Tnull or null?
 			if(node->left->isNull())
 			{
-				if(node->parent->notNull()) //TODO: What if tnull?
-					node->ParentBranch() = node->right;
+			    if(node->parent->notNull()) {
+			        node->ParentBranch() = node->right;
+			    } else
+				    _root = node->right;
 				if(node->right->notNull())
 					node->right->parent = node->parent;
-				node->right = node->parent = node->left = &_Tnull;
+				node->right = node->parent = node->left = &_Leaf;
 				return node;
 			}
 
 			if(node->right->isNull())
 			{
-				if(node->parent->notNull()) //TODO: What if tnull?
+				if(node->parent->notNull())
 					node->ParentBranch() = node->left;
-				if(node->right->notNull())
-					node->right->parent = node->left;
-				node->right = node->parent = node->left = &_Tnull;
+				else
+				    _root = node->left;
+				if(node->left->notNull())
+					node->left->parent = node->parent;
+				node->right = node->parent = node->left = &_Leaf;
 				return node;
 			}
 
@@ -161,16 +170,16 @@ namespace ft
 			copy_links(node, excluded);
 			if(node == _root)
 				_root = excluded;
-			node->right = node->parent = node->left = &_Tnull;
+			node->right = node->parent = node->left = &_Leaf;
 			return node;
 		};
 
-		size_t delete_elem(const value_type& val){
+		size_t _delete_elem(const value_type& val){
 			node_type* found_elem = _find_node(val);
 			if(!found_elem || found_elem->isNull())
 				return 0;
 			delete _exclude_node(found_elem);
-			_update_Tnull();
+            _update_Leaf();
 			_size--;
 			return 1;
 		}
@@ -195,11 +204,50 @@ namespace ft
 
 	public:
 		//Modifiers
-		//pair<iterator,bool> insert (const value_type& val);
+		//pair<iterator,bool> _insert (const value_type& val);
 		//with hint (2)
-		//iterator insert (iterator position, const value_type& val);
+		//iterator _insert (iterator position, const value_type& val);
 		//range (3)
 		//template <class InputIterator>
-		//void insert (InputIterator first, InputIterator last);
+		//void _insert (InputIterator first, InputIterator last);
+
+
+		/*
+		 * Modifiers
+		 */
+
+		ft::pair<iterator, bool> insert(const value_type& val)
+		{
+            return _put(val, _root);
+		}
+
+		iterator insert(iterator hint, const value_type& value )
+		{
+		    node_type* hint_node = hint.GetNode();
+		    if(*hint < value && value < *ft::next(hint)) //TODO:hard_test
+                return iterator(_put(value, hint).first);
+            return iterator(insert(value).first);
+		}
+
+		template< class InputIt >
+		void insert(InputIt first, InputIt last )
+		{
+            while (first != last)
+                insert(*(first++));
+		}
+
+    //    template<class >
+	//	void erase (iterator position){
+	//
+	//	}
+	//
+	//	void erase (iterator position){
+	//
+	//	}
+	//
+	//	//(2)
+	//	size_type erase (const key_type& k);
+	//	//(3)
+	//	void erase (iterator first, iterator last);
 	};
 }

@@ -118,6 +118,7 @@ void are_equal_print(const Container1 &scont, const Container2 &fcont, size_t i 
     }
 }
 #include "test_runner.h"
+#include "ft_map.h"
 
 template<class Container1, class Container2>
 void printbothdirs(const Container1 &scont, const Container2 &fcont) {
@@ -362,14 +363,14 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //			sll.push_back(slist2);		fll.push_back(flist2);
 //			sll.push_back(slist3);		fll.push_back(flist3);
 //
-//			sll.insert(sll.begin(), sll.begin(), sll.end());
-//			fll.insert(fll.begin(), fll.begin(), fll.end());
-//			sll.insert(++(sll.begin()), sll.begin(), sll.end());
-//			fll.insert(++(fll.begin()), fll.begin(), fll.end());
-//			sll.insert(--(sll.end()), sll.begin(), sll.end());
-//			fll.insert(--(fll.end()), fll.begin(), fll.end());
-//			sll.insert(sll.end(), sll.begin(), sll.end());
-//			fll.insert(fll.end(), fll.begin(), fll.end());
+//			sll._insert(sll.begin(), sll.begin(), sll.end());
+//			fll._insert(fll.begin(), fll.begin(), fll.end());
+//			sll._insert(++(sll.begin()), sll.begin(), sll.end());
+//			fll._insert(++(fll.begin()), fll.begin(), fll.end());
+//			sll._insert(--(sll.end()), sll.begin(), sll.end());
+//			fll._insert(--(fll.end()), fll.begin(), fll.end());
+//			sll._insert(sll.end(), sll.begin(), sll.end());
+//			fll._insert(fll.end(), fll.begin(), fll.end());
 //
 //			if (sll.size() != fll.size())
 //				error_exception();
@@ -416,22 +417,22 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //	are_equal_print(slist3, flist3);
 //
 //	std::cout << "\nafter insert0:" << std::endl;
-//	slist2.insert(slist2.begin(), "insert0");
-//	flist2.insert(flist2.begin(), "insert0");
+//	slist2._insert(slist2.begin(), "insert0");
+//	flist2._insert(flist2.begin(), "insert0");
 //	printcontainer("slist2", slist2);
 //	printcontainer("flist2", flist2);
 //	are_equal_print(slist2, flist2);
 //
 //	std::cout << "\nafter insert1:" << std::endl;
-//	slist2.insert(++(++slist2.begin()), "insert1");
-//	flist2.insert(++(++flist2.begin()), "insert1");
+//	slist2._insert(++(++slist2.begin()), "insert1");
+//	flist2._insert(++(++flist2.begin()), "insert1");
 //	printcontainer("slist2", slist2);
 //	printcontainer("flist2", flist2);
 //	are_equal_print(slist2, flist2);
 //
 //	std::cout << "\nafter insend:" << std::endl;
-//	slist2.insert(slist2.end(), "insend");
-//	flist2.insert(flist2.end(), "insend");
+//	slist2._insert(slist2.end(), "insend");
+//	flist2._insert(flist2.end(), "insend");
 //	printcontainer("slist2", slist2);
 //	printcontainer("flist2", flist2);
 //	are_equal_print(slist2, flist2);
@@ -456,8 +457,8 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //		if (*sit == *fit && *sit == 2 && std::distance(slist.begin(), sit) == std::distance(flist.begin(), fit))
 //			std::cout << "both now point to number 2" << std::endl;
 //
-//		sit2 = slist.insert(sit, 10);						// 1 10 2 3 4 5
-//		fit2 = flist.insert(fit, 10);						// 1 10 2 3 4 5
+//		sit2 = slist._insert(sit, 10);						// 1 10 2 3 4 5
+//		fit2 = flist._insert(fit, 10);						// 1 10 2 3 4 5
 //		// "sit" still points to number 2							^
 //		// "fit" still points to number 2							^
 //		if (*sit2 != *fit2)
@@ -466,16 +467,16 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //		if (*sit == *fit && *sit == 2 && std::distance(slist.begin(), sit) == std::distance(flist.begin(), fit))
 //			std::cout << "both still point to number 2" << std::endl;
 //
-//		slist.insert(sit, 2, 20);					//	1 10 20 20 2 3 4 5
-//		flist.insert(fit, 2, 20);					//	1 10 20 20 2 3 4 5
+//		slist._insert(sit, 2, 20);					//	1 10 20 20 2 3 4 5
+//		flist._insert(fit, 2, 20);					//	1 10 20 20 2 3 4 5
 //		--sit;		// it points now to the second 20			^
 //		--fit;		// it points now to the second 20			^
 //		if (*sit == *fit && *sit == 20 && std::distance(slist.begin(), sit) == std::distance(flist.begin(), fit))
 //			std::cout << "both now point to second 20" << std::endl;
 //
 //		std::vector<int>	myvector(2, 30);
-//		slist.insert(sit, myvector.begin(), myvector.end());
-//		flist.insert(fit, myvector.begin(), myvector.end());
+//		slist._insert(sit, myvector.begin(), myvector.end());
+//		flist._insert(fit, myvector.begin(), myvector.end());
 //													// 1 10 20 30 30 20 2 3 4 5
 //													//				 ^
 //		if (*sit == *fit && *sit == 20 && std::distance(slist.begin(), sit) == std::distance(flist.begin(), fit))
@@ -495,8 +496,8 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //		std::list<int>	slist;
 //		ft::list<int>	flist;
 //
-//		slist.insert(slist.begin(), 666, 6);
-//		flist.insert(flist.begin(), 666, 6);
+//		slist._insert(slist.begin(), 666, 6);
+//		flist._insert(flist.begin(), 666, 6);
 //		printcontainer("slist", slist);
 //		printcontainer("flist", flist);
 //
@@ -536,10 +537,10 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //
 //		are_equal_print(slist, flist);
 //
-//		slist.insert(slist.begin(), 666, 666);
-//		slist.insert(slist.begin(), 420, 420);
-//		flist.insert(flist.begin(), 666, 666);
-//		flist.insert(flist.begin(), 420, 420);
+//		slist._insert(slist.begin(), 666, 666);
+//		slist._insert(slist.begin(), 420, 420);
+//		flist._insert(flist.begin(), 666, 666);
+//		flist._insert(flist.begin(), 420, 420);
 //
 //		slist.reverse();
 //		flist.reverse();
@@ -582,8 +583,8 @@ void printbothdirs(const Container1 &scont, const Container2 &fcont) {
 //		std::cout << "---------------------------" << std::endl;
 //		std::list<int>	slist(666, 666);
 //		ft::list<int>	flist(666, 666);
-//		slist.insert(slist.begin(), 420, 420);
-//		flist.insert(flist.begin(), 420, 420);
+//		slist._insert(slist.begin(), 420, 420);
+//		flist._insert(flist.begin(), 420, 420);
 //
 //		slist.unique();
 //		flist.unique();
@@ -1070,15 +1071,15 @@ void ft_vector_tests() {
 //
 //        sit = svect.begin();
 //        fit = fvect.begin();
-//        sit = svect.insert(sit, 200);
-//        fit = fvect.insert(fit, 200);
+//        sit = svect._insert(sit, 200);
+//        fit = fvect._insert(fit, 200);
 //        printcontainer("svect", svect);
 //        printcontainer("fvect", fvect);
 //        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
 //        ASSERT_EQUAL(svect, fvect);
 //
-//        svect.insert(sit, 1, 300);
-//        fvect.insert(fit, 1, 300);
+//        svect._insert(sit, 1, 300);
+//        fvect._insert(fit, 1, 300);
 //        printcontainer("svect", svect);
 //        printcontainer("fvect", fvect);
 //        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
@@ -1090,30 +1091,30 @@ void ft_vector_tests() {
 //
 //        std::vector<int> svect2(4, 400);
 //        ft::vector<int>  fvect2(4, 400);
-////        svect.insert(sit + 2, svect2.begin(), svect2.end());
-////        fvect.insert(fit + 2, fvect2.begin(), fvect2.end());
+////        svect._insert(sit + 2, svect2.begin(), svect2.end());
+////        fvect._insert(fit + 2, fvect2.begin(), fvect2.end());
 ////        printcontainer("svect", svect);
 ////        printcontainer("fvect", fvect);
 ////        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
 ////        ASSERT_EQUAL(svect, fvect);
 //
 //        int myarray[] = {501, 502, 503};
-//        svect.insert(svect.begin(), myarray, myarray + 3);
-//        fvect.insert(fvect.begin(), myarray, myarray + 3);
+//        svect._insert(svect.begin(), myarray, myarray + 3);
+//        fvect._insert(fvect.begin(), myarray, myarray + 3);
 //        printcontainer("svect", svect);
 //        printcontainer("fvect", fvect);
 //        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
 //        ASSERT_EQUAL(svect, fvect);
 //
-////        svect.insert(svect.begin(), svect.begin(), svect.end());
-////        fvect.insert(fvect.begin(), fvect.begin(), fvect.end());
+////        svect._insert(svect.begin(), svect.begin(), svect.end());
+////        fvect._insert(fvect.begin(), fvect.begin(), fvect.end());
 ////        printcontainer("svect", svect);
 ////        printcontainer("fvect", fvect);
 ////        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
 ////        ASSERT_EQUAL(svect, fvect);
 //
-////        svect.insert(svect.end(), svect.begin(), svect.end());
-////        fvect.insert(fvect.end(), fvect.begin(), fvect.end());
+////        svect._insert(svect.end(), svect.begin(), svect.end());
+////        fvect._insert(fvect.end(), fvect.begin(), fvect.end());
 ////        printcontainer("svect", svect);
 ////        printcontainer("fvect", fvect);
 ////        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
@@ -1127,13 +1128,13 @@ void ft_vector_tests() {
 //        svv.push_back(svect2);
 //        fvv.push_back(fvect2);
 //
-//        svv.insert(svv.begin(), svv.begin(), svv.end());
-//        fvv.insert(fvv.begin(), fvv.begin(), fvv.end());
+//        svv._insert(svv.begin(), svv.begin(), svv.end());
+//        fvv._insert(fvv.begin(), fvv.begin(), fvv.end());
 //#if (__cplusplus < 201103L)    //	tests below fail on linux with c++11 std
-//        svv.insert(svv.end() - 1, svv.begin(), svv.end());
-//        fvv.insert(fvv.end() - 1, fvv.begin(), fvv.end());
-//        svv.insert(svv.end(), svv.begin(), svv.end());
-//        fvv.insert(fvv.end(), fvv.begin(), fvv.end());
+//        svv._insert(svv.end() - 1, svv.begin(), svv.end());
+//        fvv._insert(fvv.end() - 1, fvv.begin(), fvv.end());
+//        svv._insert(svv.end(), svv.begin(), svv.end());
+//        fvv._insert(fvv.end(), fvv.begin(), fvv.end());
 //#endif
 //        svv.erase(svv.begin() + 1, svv.end() - 3);
 //        fvv.erase(fvv.begin() + 1, fvv.end() - 3);
@@ -1338,29 +1339,29 @@ void ft_vector_tests() {
 //			fmap.value_comp()(std::make_pair("key1", "val2"), std::make_pair("key2", "val1")) <<
 //			std::endl;
 //
-//		smap.insert(std::pair<std::string, std::string>("key1", "val1"));
-//		fmap.insert(std::pair<std::string, std::string>("key1", "val1"));
+//		smap._insert(std::pair<std::string, std::string>("key1", "val1"));
+//		fmap._insert(std::pair<std::string, std::string>("key1", "val1"));
 //		are_equal_print(smap, fmap);
 //
-//		smap.insert(std::pair<std::string, std::string>("key1", "key1"));
-//		fmap.insert(std::pair<std::string, std::string>("key1", "key1"));
+//		smap._insert(std::pair<std::string, std::string>("key1", "key1"));
+//		fmap._insert(std::pair<std::string, std::string>("key1", "key1"));
 //
-//		smap.insert(std::pair<std::string, std::string>("key2", "val2"));
-//		fmap.insert(std::pair<std::string, std::string>("key2", "val2"));
-//		smap.insert(std::pair<std::string, std::string>("key3", "val3"));
-//		fmap.insert(std::pair<std::string, std::string>("key3", "val3"));
-//		smap.insert(std::pair<std::string, std::string>("key7", "val7"));
-//		fmap.insert(std::pair<std::string, std::string>("key7", "val7"));
-//		smap.insert(std::pair<std::string, std::string>("key4", "val4"));
-//		fmap.insert(std::pair<std::string, std::string>("key4", "val4"));
-//		smap.insert(std::pair<std::string, std::string>("key5", "val5"));
-//		fmap.insert(std::pair<std::string, std::string>("key5", "val5"));
-//		smap.insert(std::pair<std::string, std::string>("key6", "val6"));
-//		fmap.insert(std::pair<std::string, std::string>("key6", "val6"));
-//		smap.insert(std::pair<std::string, std::string>("key8", "val8"));
-//		fmap.insert(std::pair<std::string, std::string>("key8", "val8"));
-//		smap.insert(std::pair<std::string, std::string>("key9", "val9"));
-//		fmap.insert(std::pair<std::string, std::string>("key9", "val9"));
+//		smap._insert(std::pair<std::string, std::string>("key2", "val2"));
+//		fmap._insert(std::pair<std::string, std::string>("key2", "val2"));
+//		smap._insert(std::pair<std::string, std::string>("key3", "val3"));
+//		fmap._insert(std::pair<std::string, std::string>("key3", "val3"));
+//		smap._insert(std::pair<std::string, std::string>("key7", "val7"));
+//		fmap._insert(std::pair<std::string, std::string>("key7", "val7"));
+//		smap._insert(std::pair<std::string, std::string>("key4", "val4"));
+//		fmap._insert(std::pair<std::string, std::string>("key4", "val4"));
+//		smap._insert(std::pair<std::string, std::string>("key5", "val5"));
+//		fmap._insert(std::pair<std::string, std::string>("key5", "val5"));
+//		smap._insert(std::pair<std::string, std::string>("key6", "val6"));
+//		fmap._insert(std::pair<std::string, std::string>("key6", "val6"));
+//		smap._insert(std::pair<std::string, std::string>("key8", "val8"));
+//		fmap._insert(std::pair<std::string, std::string>("key8", "val8"));
+//		smap._insert(std::pair<std::string, std::string>("key9", "val9"));
+//		fmap._insert(std::pair<std::string, std::string>("key9", "val9"));
 //		are_equal_print(smap, fmap);
 //
 //		smap["allo"] = "da";
@@ -1436,19 +1437,19 @@ void ft_vector_tests() {
 //	{
 //		std::cout << "-------------" << std::endl;
 //		std::map<char,int>	smap;							ft::map<char,int>	fmap;
-//		// first insert function version (single parameter):
-//		smap.insert(std::pair<char,int>('a', 100));			fmap.insert(std::pair<char,int>('a', 100));
-//		smap.insert(std::pair<char,int>('z', 200));			fmap.insert(std::pair<char,int>('z', 200));
-//		smap.insert(std::pair<char,int>('s', 100));			fmap.insert(std::pair<char,int>('s', 100));
-//		smap.insert(std::pair<char,int>('e', 200));			fmap.insert(std::pair<char,int>('e', 200));
-//		smap.insert(std::pair<char,int>('g', 100));			fmap.insert(std::pair<char,int>('g', 100));
-//		smap.insert(std::pair<char,int>('j', 200));			fmap.insert(std::pair<char,int>('j', 200));
-//		smap.insert(std::pair<char,int>('w', 100));			fmap.insert(std::pair<char,int>('w', 100));
-//		smap.insert(std::pair<char,int>('z', 200));			fmap.insert(std::pair<char,int>('z', 200));
+//		// first _insert function version (single parameter):
+//		smap._insert(std::pair<char,int>('a', 100));			fmap.insert(std::pair<char,int>('a', 100));
+//		smap._insert(std::pair<char,int>('z', 200));			fmap.insert(std::pair<char,int>('z', 200));
+//		smap.insert(std::pair<char,int>('s', 100));			fmap._insert(std::pair<char,int>('s', 100));
+//		smap._insert(std::pair<char,int>('e', 200));			fmap.insert(std::pair<char,int>('e', 200));
+//		smap.insert(std::pair<char,int>('g', 100));			fmap._insert(std::pair<char,int>('g', 100));
+//		smap._insert(std::pair<char,int>('j', 200));			fmap.insert(std::pair<char,int>('j', 200));
+//		smap._insert(std::pair<char,int>('w', 100));			fmap.insert(std::pair<char,int>('w', 100));
+//		smap.insert(std::pair<char,int>('z', 200));			fmap._insert(std::pair<char,int>('z', 200));
 //		are_equal_print(smap, fmap);
 //
 //		std::pair<std::map<char,int>::iterator, bool> sret;	std::pair<ft::map<char,int>::iterator, bool> fret;
-//		sret = smap.insert(std::pair<char,int>('z', 500));	fret = fmap.insert(std::pair<char,int>('z', 500));
+//		sret = smap._insert(std::pair<char,int>('z', 500));	fret = fmap.insert(std::pair<char,int>('z', 500));
 //		are_equal_print(smap, fmap);
 //
 //		if (sret.second == false)
@@ -1463,46 +1464,46 @@ void ft_vector_tests() {
 //		}
 //		are_equal_print(smap, fmap);
 //
-//		// second insert function version (with hint position):
+//		// second _insert function version (with hint position):
 //		std::map<char,int>::iterator sit = smap.begin();	ft::map<char,int>::iterator fit = fmap.begin();
-//		smap.insert(sit, std::pair<char,int>('b',300));
-//		fmap.insert(fit, std::pair<char,int>('b',300));
-//		smap.insert(sit, std::pair<char,int>('b',300));
-//		fmap.insert(fit, std::pair<char,int>('b',300));
-//		sit = smap.insert(smap.find('w'), std::pair<char,int>('y',300));
-//		fit = fmap.insert(fmap.find('w'), std::pair<char,int>('y',300));
+//		smap._insert(sit, std::pair<char,int>('b',300));
+//		fmap._insert(fit, std::pair<char,int>('b',300));
+//		smap._insert(sit, std::pair<char,int>('b',300));
+//		fmap._insert(fit, std::pair<char,int>('b',300));
+//		sit = smap._insert(smap.find('w'), std::pair<char,int>('y',300));
+//		fit = fmap._insert(fmap.find('w'), std::pair<char,int>('y',300));
 //		if (*sit != *fit)
 //			error_exception();
-//		sit = smap.insert(smap.find('s'), std::pair<char,int>('t',300));
-//		fit = fmap.insert(fmap.find('s'), std::pair<char,int>('t',300));
+//		sit = smap._insert(smap.find('s'), std::pair<char,int>('t',300));
+//		fit = fmap._insert(fmap.find('s'), std::pair<char,int>('t',300));
 //		if (*sit != *fit)
 //			error_exception();
-//		sit = smap.insert(smap.find('z'), std::pair<char,int>('}',300));
-//		fit = fmap.insert(fmap.find('z'), std::pair<char,int>('}',300));
+//		sit = smap._insert(smap.find('z'), std::pair<char,int>('}',300));
+//		fit = fmap._insert(fmap.find('z'), std::pair<char,int>('}',300));
 //		if (*sit != *fit)
 //			error_exception();
-//		sit = smap.insert(smap.find('g'), std::pair<char,int>('i',300));
-//		fit = fmap.insert(fmap.find('g'), std::pair<char,int>('i',300));
+//		sit = smap._insert(smap.find('g'), std::pair<char,int>('i',300));
+//		fit = fmap._insert(fmap.find('g'), std::pair<char,int>('i',300));
 //		if (*sit != *fit)
 //			error_exception();
-//		sit = smap.insert(smap.find('t'), std::pair<char,int>('u',300));
-//		fit = fmap.insert(fmap.find('t'), std::pair<char,int>('u',300));
+//		sit = smap._insert(smap.find('t'), std::pair<char,int>('u',300));
+//		fit = fmap._insert(fmap.find('t'), std::pair<char,int>('u',300));
 //		if (*sit != *fit)
 //			error_exception();
-//		sit = smap.insert(smap.end(), std::pair<char,int>('~',300));
-//		fit = fmap.insert(fmap.end(), std::pair<char,int>('~',300));
+//		sit = smap._insert(smap.end(), std::pair<char,int>('~',300));
+//		fit = fmap._insert(fmap.end(), std::pair<char,int>('~',300));
 //		if (*sit != *fit)
 //			error_exception();
 //		are_equal_print(smap, fmap);
-//		smap.insert(sit, std::pair<char,int>('c',400));
-//		fmap.insert(fit, std::pair<char,int>('c',400));
-//		smap.insert(sit, std::pair<char,int>('c',400));
-//		fmap.insert(fit, std::pair<char,int>('c',400));
+//		smap._insert(sit, std::pair<char,int>('c',400));
+//		fmap._insert(fit, std::pair<char,int>('c',400));
+//		smap._insert(sit, std::pair<char,int>('c',400));
+//		fmap._insert(fit, std::pair<char,int>('c',400));
 //		are_equal_print(smap, fmap);
 //
-//		// third insert function version (range insertion):
+//		// third _insert function version (range insertion):
 //		std::map<char, int> anothersmap;					ft::map<char,int> anotherfmap;
-//		anothersmap.insert(smap.begin(), smap.find('c'));	anotherfmap.insert(fmap.begin(), fmap.find('c'));
+//		anothersmap._insert(smap.begin(), smap.find('c'));	anotherfmap.insert(fmap.begin(), fmap.find('c'));
 //
 //		// showing contents:
 //		printmap("smap", smap);
@@ -1511,7 +1512,7 @@ void ft_vector_tests() {
 //		printmap("anotherfmap", anotherfmap);
 //		are_equal_print(anothersmap, anotherfmap);
 //
-//		anothersmap.insert(++smap.begin(), --smap.end());	anotherfmap.insert(++fmap.begin(), --fmap.end());
+//		anothersmap._insert(++smap.begin(), --smap.end());	anotherfmap.insert(++fmap.begin(), --fmap.end());
 //		are_equal_print(anothersmap, anotherfmap);
 //		smap.erase(++smap.begin(), --smap.end());			fmap.erase(++fmap.begin(), --fmap.end());
 //		are_equal_print(smap, fmap);
@@ -1519,8 +1520,8 @@ void ft_vector_tests() {
 //		std::cout << "------------- MAPS IN MAP" << std::endl;
 //		std::map<int, std::map<char, int> >	mapsmap;
 //		ft::map<int, ft::map<char, int> >	mapfmap;
-//		mapsmap.insert(std::make_pair(1, smap));			mapfmap.insert(std::make_pair(1, fmap));
-//		mapsmap.insert(std::make_pair(2, anothersmap));		mapfmap.insert(std::make_pair(2, anotherfmap));
+//		mapsmap._insert(std::make_pair(1, smap));			mapfmap.insert(std::make_pair(1, fmap));
+//		mapsmap._insert(std::make_pair(2, anothersmap));		mapfmap.insert(std::make_pair(2, anotherfmap));
 //
 //		printmap("mapsmap[1]", mapsmap[1]);
 //		printmap("mapfmap[1]", mapfmap[1]);
@@ -1535,7 +1536,7 @@ void ft_vector_tests() {
 //		std::map<char,int>				smap;	ft::map<char,int>				fmap;
 //		std::map<char,int>::iterator	sit;	ft::map<char,int>::iterator		fit;
 //
-//		// insert some values:
+//		// _insert some values:
 //		smap['a'] = 10;					fmap['a'] = 10;
 //		smap['b'] = 20;					fmap['b'] = 20;
 //		smap['c'] = 30;					fmap['c'] = 30;
@@ -2028,8 +2029,8 @@ double gets(const timespec &start) {
 //		std::pair<size_t, mapdata>	tmp(size_t(rand()) % INSANITYSIZE, mapdata());
 //		if (slist.size() % 2)
 //		{
-//			sres_t	sres = smap.insert(tmp);
-//			fres_t	fres = fmap.insert(tmp);
+//			sres_t	sres = smap._insert(tmp);
+//			fres_t	fres = fmap._insert(tmp);
 //			if (*(sres.first) != *(fres.first) || sres.second != fres.second)
 //				error_exception();
 //		}
@@ -2371,7 +2372,7 @@ double gets(const timespec &start) {
 //	{	size_t	tmp(sl.size());
 //		sl.push_back(tmp);						fl.push_back(tmp);
 //		sv.push_back(tmp);						fv.push_back(tmp);
-//		sm.insert(std::make_pair(tmp, tmp));	fm.insert(std::make_pair(tmp, tmp));
+//		sm.insert(std::make_pair(tmp, tmp));	fm._insert(std::make_pair(tmp, tmp));
 //	}
 //
 //	std::list<size_t>::reverse_iterator					slrit;
@@ -2882,27 +2883,41 @@ struct Cry
 int main(int ac, char **av) {
 	test_all();
 	ft::map<int, int> test;
-	test.insert(8);
-	test.insert(3);
-	test.insert(10);
-	test.insert(1);
-	test.insert(6);
-	test.insert(14);
-	test.insert(4);
-	test.insert(7);
-	test.insert(13);
+    test._insert(8);
+    test._insert(3);
+    test._insert(10);
+    test._insert(1);
+    test._insert(6);
+    test._insert(14);
+    test._insert(4);
+    test._insert(7);
+    test._insert(13);
 	test.print_map();
 	test.raw_print();
 	std::cout << "--------------------------------------" << std::endl;
-	test.delete_elem(8);
+	for (int i = 15; i > 0; i--) {
+	    std::cout << "Del: [" << test.size() << ":"<< i << ":" << test._delete_elem(i) << "]";
+	    test.raw_print();
+	    std::cout << std::endl;
+	    test.print_map();
+	}
+
 	test.print_map();
 	test.raw_print();
+
+
+	std::set<int> test_set;
+    std::vector<int> test_vec;
+
+	for(int i = 0; i < 10; i++)
+	    test_set.insert(i);
+	std::set<int>::iterator iti = test_set.begin();
 	//typedef ft::map<int, int>::iterator map_iter;
 	//std::vector<map_iter> iters;
 	//srand(time(0));
 	//for(int i = 0; i < 10; i++)
 	//{
-	//	iters.push_back(test.insert(rand() % 100));
+	//	iters.push_back(test._insert(rand() % 100));
 	//}
 	//test.print_map();
 	//std::cerr << "iter_test:" << endl;
