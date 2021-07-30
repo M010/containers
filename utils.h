@@ -38,10 +38,10 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 		Itr itr;
 	public:
 		explicit reverse_iterator(Itr itr): itr(itr) {}
-		typename Itr::value& operator*() {
+		typename Itr::value_type& operator*() {
 			return *ft::prev(itr);
 		}
-		typename Itr::value& operator++() {
+		typename Itr::value_type& operator++() {
 			--itr;
 			return *this;
 		}

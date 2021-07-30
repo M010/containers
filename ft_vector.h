@@ -399,11 +399,11 @@ class vector {
     }
 
     reverse_iterator rbegin() {
-        return std::reverse_iterator<iterator>(end());
+        return reverse_iterator(end());
     }
 
     reverse_iterator rend() {
-        return std::reverse_iterator<iterator>(begin());
+        return reverse_iterator(begin());
     }
 
     const_reverse_iterator rbegin() const {

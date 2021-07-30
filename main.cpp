@@ -1,3 +1,4 @@
+#include "ft_map.h"
 #include "ft_vector.h"
 #include "test_runner.h"
 #include <iostream>
@@ -10,7 +11,6 @@
 #include <stack>
 #include <vector>
 //#include "list.hpp"
-//#include "map.hpp"
 //#include "queue.hpp"
 //#include "priority_queue.hpp"
 
@@ -2859,9 +2859,47 @@ void all_vector_tests(TestRunner& tr)
 	RUN_TEST(tr, ft_vector_tests);
 }
 
+
+bool fncomp (char lhs, char rhs) {return lhs<rhs;}
+
+struct classcomp {
+	bool operator() (const char& lhs, const char& rhs) const
+	{return lhs<rhs;}
+};
+
+
+
+void empt_map_test(){
+	{
+		ft::map<char,int> first;
+
+		first['a']=10;
+		first['b']=30;
+		first['c']=50;
+		first['d']=70;
+
+		ft::map<char,int> second (first.begin(),first.end());
+
+		ft::map<char,int> third(second);
+
+		ft::map<char,int,classcomp> fourth;                 // class as Compare
+
+		bool(*fn_pt)(char,char) = fncomp;
+		ft::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
+	}
+}
+
+void all_map_tests(TestRunner& tr)
+{
+	RUN_TEST(tr, empt_map_test);
+}
+
+
+
 void test_all() {
     TestRunner tr;
     //all_vector_tests(tr);
+
 }
 
 struct Cry
@@ -2882,35 +2920,13 @@ struct Cry
 #include <algorithm>
 int main(int ac, char **av) {
 	test_all();
-	ft::map<int, int> test;
-    test._insert(8);
-    test._insert(3);
-    test._insert(10);
-    test._insert(1);
-    test._insert(6);
-    test._insert(14);
-    test._insert(4);
-    test._insert(7);
-    test._insert(13);
-	test.print_map();
-	test.raw_print();
-	std::cout << "--------------------------------------" << std::endl;
-	for (int i = 15; i > 0; i--) {
-	    std::cout << "Del: [" << test.size() << ":"<< i << ":" << test._delete_elem(i) << "]";
-	    test.raw_print();
-	    std::cout << std::endl;
-	    test.print_map();
-	}
-
-	test.print_map();
-	test.raw_print();
-
 
 	std::set<int> test_set;
     std::vector<int> test_vec;
 
 	for(int i = 0; i < 10; i++)
 	    test_set.insert(i);
+	test_set.max_size();
 	std::set<int>::iterator iti = test_set.begin();
 	//typedef ft::map<int, int>::iterator map_iter;
 	//std::vector<map_iter> iters;
