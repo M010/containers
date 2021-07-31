@@ -33,27 +33,34 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 	iterator next(iterator it) {
 		return ++it;
 	}
-	template<typename Itr>
-	class reverse_iterator {
-		Itr itr;
-	public:
-		explicit reverse_iterator(Itr itr): itr(itr) {}
-		typename Itr::value_type& operator*() {
-			return *ft::prev(itr);
-		}
-		typename Itr::value_type& operator++() {
-			--itr;
-			return *this;
-		}
-		friend bool operator!=(reverse_iterator<Itr> a, reverse_iterator<Itr> b) {
-			return a.itr != b.itr;
-		}
+
+	template<class T>
+	struct remove_const{
+		typedef T type;
 	};
+
+	template<class T>
+	struct remove_const<const T>{
+		typedef T type;
+	};
+
+	template<bool B, class T = void>
+	struct enable_if {};
+
+	template<class T>
+	struct enable_if<true, T> { typedef T type; };
+
+	template<typename Iter>
+	struct iterator_traits
+	{
+		typedef typename Iter::iterator_category iterator_category;
+		typedef typename Iter::value_type 		value_type;
+		typedef typename Iter::difference_type 	difference_type;
+		typedef typename Iter::pointer 			pointer;
+		typedef typename Iter::reference 		reference;
+	};
+
+
 }
 
-template<bool B, class T = void>
-struct enable_if {};
-
-template<class T>
-struct enable_if<true, T> { typedef T type; };
 
