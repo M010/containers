@@ -1,15 +1,16 @@
 #pragma once
 
+#include "ft_map.h"
+#include "ft_vector.h"
+#include "utils.h"
 #include <sstream>
 #include <stdexcept>
-#include <stdlib.h>
+#include <cstdlib>
 #include <iostream>
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
-#include "ft_vector.h"
-#include "utils.h"
 
 using std::ostream;
 using std::string;
@@ -43,6 +44,18 @@ bool operator==(const ft::vector<T> lhs, const std::vector<T> rhs){
     return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
+template<class K, class V>
+bool operator==(const ft::map<K, V> lhs, const std::map<K, V> rhs){
+	if(lhs.size() != rhs.size())
+		return false;
+	return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template<class K, class V>
+bool operator==(const std::map<K, V> lhs, const ft::map<K, V> rhs){
+	return rhs == lhs;
+}
+
 
 template <class T>
 ostream& operator << (ostream& os, const std::vector<T>& s) {
@@ -60,16 +73,31 @@ ostream& operator << (ostream& os, const std::vector<T>& s) {
 
 template <class T>
 ostream& operator << (ostream& os, const ft::vector<T>& s) {
-    os << "!size: " << s.size() << " capacity: "<< s.capacity() << "{";
-    bool first = true;
+	os << "!size: " << s.size() << " capacity: "<< s.capacity() << "{";
+	bool first = true;
 	for (typename ft::vector<T>::const_iterator x = s.begin(); x != s.end(); x++) {
-        if (!first) {
-            os << ", ";
-        }
-        first = false;
-        os << *x;
-    }
-    return os << "}!";
+		if (!first) {
+			os << ", ";
+		}
+		first = false;
+		os << *x;
+	}
+	return os << "}";
+}
+
+
+template <class K, class V>
+ostream& operator << (ostream& os, const ft::map<K, V>& m) {
+	os << "{" << "size: " << m.size();
+	bool first = true;
+	for (typename ft::map<K, V>::iteratror kv = m.begin(); kv != m.end(); kv++) {
+		if (!first) {
+			os << ", ";
+		}
+		first = false;
+		os << kv->first << ": " << kv->second;
+	}
+	return os << "}";
 }
 
 template <class T>
@@ -101,7 +129,7 @@ ostream& operator << (ostream& os, const std::map<K, V>& m) {
 }
 
 template<class T, class U>
-void AssertEqual(const T& t, const U& u, string hint = "") {
+void AssertEqual(const T& t, const U& u, const string& hint = "") {
     if (!(t == u)) {
         std::ostringstream os;
         os << "Assertion failed: " << t << " != " << u;
