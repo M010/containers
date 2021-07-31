@@ -60,7 +60,72 @@ bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
 		typedef typename Iter::reference 		reference;
 	};
 
+	template<class T>
+	struct is_integral_helper{
+		const static bool value = false;
+	};
+
+	template<>
+	struct is_integral_helper<bool>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<int>{
+		const static bool value = true;
+	};
+
+
+	template<>
+	struct is_integral_helper<long>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<long long>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<char>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<short>{
+		const static bool value = true;
+	};
+
+
+	template<>
+	struct is_integral_helper<unsigned int>{
+		const static bool value = true;
+	};
+
+
+	template<>
+	struct is_integral_helper<unsigned long>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<unsigned long long>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<unsigned char>{
+		const static bool value = true;
+	};
+
+	template<>
+	struct is_integral_helper<unsigned short>{
+		const static bool value = true;
+	};
+
+	template<class T>
+	struct is_integral{
+		const static bool value = is_integral_helper<typename remove_const<T>::type >::value;
+	};
 
 }
-
-
