@@ -1,5 +1,6 @@
 #pragma once
 
+#include "utils.h"
 #include "ft_map.h"
 #include "ft_vector.h"
 #include "utils.h"
@@ -42,6 +43,18 @@ bool operator==(const ft::vector<T> lhs, const std::vector<T> rhs){
     if(lhs.size() != rhs.size())
         return false;
     return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template<class K, class V, class Cmp>
+bool operator==(const ft::map<K, V, Cmp> lhs, const std::map<K, V, Cmp> rhs){
+	if(lhs.size() != rhs.size())
+		return false;
+	return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template<class K, class V, class Cmp>
+bool operator==(const std::map<K, V, Cmp> lhs, const ft::map<K, V, Cmp> rhs){
+	return rhs == lhs;
 }
 
 template<class K, class V>
@@ -90,7 +103,21 @@ template <class K, class V>
 ostream& operator << (ostream& os, const ft::map<K, V>& m) {
 	os << "{" << "size: " << m.size();
 	bool first = true;
-	for (typename ft::map<K, V>::iteratror kv = m.begin(); kv != m.end(); kv++) {
+	for (typename ft::map<K, V>::const_iterator kv = m.begin(); kv != m.end(); kv++) {
+		if (!first) {
+			os << ", ";
+		}
+		first = false;
+		os << kv->first << ": " << kv->second;
+	}
+	return os << "}";
+}
+
+template <class K, class V, class cmp>
+ostream& operator << (ostream& os, const ft::map<K, V, cmp>& m) {
+	os << "{" << "size: " << m.size();
+	bool first = true;
+	for (typename ft::map<K, V, cmp>::const_iterator kv = m.begin(); kv != m.end(); kv++) {
 		if (!first) {
 			os << ", ";
 		}
@@ -113,12 +140,21 @@ ostream& operator << (ostream& os, const std::set<T>& s) {
     }
     return os << "}";
 }
+template<class F, class S>
+bool operator==(std::pair<F, S> lhs , ft::pair<F, S>rhs){
+	return lhs == std::pair<F, S>(rhs.first, rhs.second);
+}
+
+template<class F, class S>
+bool operator==(ft::pair<F, S> lhs , std::pair<F, S>rhs){
+	return rhs == lhs;
+}
 
 template <class K, class V>
 ostream& operator << (ostream& os, const std::map<K, V>& m) {
     os << "{";
     bool first = true;
-	for (typename std::map<K, V>::iteratror kv = m.begin(); kv != m.end(); kv++) {
+	for (typename std::map<K, V>::const_iterator kv = m.begin(); kv != m.end(); kv++) {
         if (!first) {
             os << ", ";
         }
@@ -126,6 +162,21 @@ ostream& operator << (ostream& os, const std::map<K, V>& m) {
         os << kv->first << ": " << kv->second;
     }
     return os << "}";
+}
+
+
+template <class K, class V, class Cmp>
+ostream& operator << (ostream& os, const std::map<K, V, Cmp>& m) {
+	os << "{";
+	bool first = true;
+	for (typename std::map<K, V, Cmp>::const_iterator kv = m.begin(); kv != m.end(); kv++) {
+		if (!first) {
+			os << ", ";
+		}
+		first = false;
+		os << kv->first << ": " << kv->second;
+	}
+	return os << "}";
 }
 
 template<class T, class U>
@@ -172,6 +223,12 @@ private:
     int fail_count;
 };
 
+template <class T>
+std::string ft_tostring(T t){
+	std::ostringstream ss;
+	ss << t;
+	return ss.str();
+};
 #define ASSERT_EQUAL(x, y) {            \
   std::ostringstream os;                \
   os << #x << " != " << #y << ", "      \
@@ -186,5 +243,5 @@ private:
   Assert(x, os.str());                  \
 }
 
-#define RUN_TEST(tr, func) \
-  tr.RunTest(func, #func)
+
+#define RUN_TEST(tr, func) tr.RunTest(func, #func)

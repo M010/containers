@@ -2,6 +2,7 @@
 #include "Node.h"
 #include <iterator>
 #include <cassert>
+#include "utils.h"
 
 
 namespace ft
@@ -16,15 +17,19 @@ namespace ft
 		typedef value_type*  pointer;
 		typedef value_type& reference;
 		typedef rbIterator<T> 	self_type;
-		typedef Node<value_type> node_type;
+		typedef Node<typename remove_const<value_type>::type> node_type;
 		rbIterator(node_type* node = NULL): _node(node){};
 	private:
 		node_type *_node;
-     public:
+	public:
+		template<class Some>
+		rbIterator(rbIterator<Some> it){
+			_node = it.GetNode();
+		}
 
-        node_type *GetNode() const {
-            return _node;
-        }
+		node_type *GetNode() const {
+			return _node;
+		}
 
 		bool operator==(const rbIterator &rhs) const
 		{
@@ -60,7 +65,7 @@ namespace ft
 			return tmp;
 		}
 
-		reference operator*() { return _node->data; }
-		pointer operator->() { return &(_node->data); }
+		reference operator*() { return const_cast<reference>(_node->val()); }
+		pointer operator->() { return &(_node->ref_val()); }
 	};
 }

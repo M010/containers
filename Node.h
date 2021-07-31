@@ -36,6 +36,10 @@ namespace ft
 		const value_type& val() const{
 			return data;
 		}
+
+		value_type& ref_val(){
+			return data;
+		}
 		void val(const value_type& val) const{
 			data = val;
 		}
