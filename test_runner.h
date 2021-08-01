@@ -49,7 +49,20 @@ template<class K, class V, class Cmp>
 bool operator==(const ft::map<K, V, Cmp> lhs, const std::map<K, V, Cmp> rhs){
 	if(lhs.size() != rhs.size())
 		return false;
-	return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	typename std::map<K, V,Cmp>::const_iterator sit= rhs.begin();
+	for(typename ft::map<K, V,Cmp>::const_iterator it = lhs.begin(); it!=lhs.end(); sit++, it++) {
+		bool first_equal = (!rhs.key_comp()(it->first, sit->first) && !rhs.key_comp()(sit->first, it->first));
+		if(!first_equal && !(it->second == sit->second))
+			return false;
+	}
+
+//	typename std::map<K, V,Cmp>::const_reverse_iterator rsit = rhs.rbegin();
+//	for(typename ft::map<K, V,Cmp>::const_reverse_iterator rit = lhs.rbegin(); rit!=lhs.rend(); rsit++, rit++) {
+//		bool first_equal = (!rhs.key_comp()(rit->first, rsit->first) && !rhs.key_comp()(rsit->first, rit->first));
+//		if(!first_equal && !(rit->second == rsit->second))
+//			return false;
+//	}
+	return true;
 }
 
 template<class K, class V, class Cmp>
@@ -61,7 +74,19 @@ template<class K, class V>
 bool operator==(const ft::map<K, V> lhs, const std::map<K, V> rhs){
 	if(lhs.size() != rhs.size())
 		return false;
-	return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	typename std::map<K, V>::const_iterator sit= rhs.begin();
+	for(typename ft::map<K, V>::const_iterator it = lhs.begin(); it!=lhs.end(); sit++, it++) {
+		if(!(it->first == sit->first) && !(it->second == sit->second))
+			return false;
+	}
+
+//	typename std::map<K, V>::const_reverse_iterator rsit = rhs.rbegin();
+//	for(typename ft::map<K, V>::const_reverse_iterator rit = lhs.rbegin(); rit!=lhs.rend(); rsit++, rit++) {
+//		if(!(rit->first == rsit->first) && !(rit->second == rsit->second))
+//			return false;
+//	}
+//
+	return true;
 }
 
 template<class K, class V>

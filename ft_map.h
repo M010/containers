@@ -250,7 +250,10 @@ namespace ft
 		explicit map(const key_compare &comp = key_compare(),
 					 const allocator_type &alloc = allocator_type())
 				: _size(0), _root(NULL), _key_cmp(comp), _alloc(alloc)
-		{ _Leaf = new node_type(true); }
+		{
+			_root = _Leaf = new node_type(true);
+			_update_Leaf();
+		}
 
 		template<class InputIterator>
 		map(InputIterator first, InputIterator last,
@@ -259,14 +262,16 @@ namespace ft
 			typename enable_if<!is_integral<InputIterator>::value>::type * = 0) :
 				_size(0), _root(NULL), _key_cmp(comp), _alloc(alloc)
 		{
-			_Leaf = new node_type(true);
+			_root = _Leaf = new node_type(true);
+			_update_Leaf();
 			this->insert(first, last);
 		}
 
 		map(const map &other) :
 				_size(0), _root(NULL), _key_cmp(other._key_cmp), _alloc(other._alloc)
 		{
-			_Leaf = new node_type(true);
+			_root = _Leaf = new node_type(true);
+			_update_Leaf();
 			*this = other;
 		}
 

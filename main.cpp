@@ -42,6 +42,7 @@ void map_constructor_tests()
 	{
 		using std::endl;
 		using std::cout;
+
 		// (1) Default constructor
 		std::map<std::string, int> map1;
 		map1["something"] = 69;
@@ -53,49 +54,41 @@ void map_constructor_tests()
 		fmap1["something"] = 69;
 		fmap1["anything"] = 199;
 		fmap1["that thing"] = 50;
-
 		ASSERT_EQUAL(fmap1, map1);
 		std::cout << "map1 = " << fmap1 << std::endl;
-		fmap1.erase(fmap1.find("something"));
 
 		// (2) Range constructor
-		//std::map<std::string, int> iter(map1.find("anything"), map1.end());
-		//std::cout << "\niter = " << (iter) << std::endl;
-		//std::cout << "map1 = " << std::endl;
+		std::map<std::string, int> iter(map1.find("anything"), map1.end());
+		ft::map<std::string, int> fiter(fmap1.find("anything"), fmap1.end());
 
-		//ft::map<std::string, int> fiter(fmap1.find("anything"), fmap1.end());
-		//std::cout << "\niter = " << (fiter) << std::endl;
-		//std::cout << "map1 = " << std::endl;
+		// (2) Range constructor
+		std::map<std::string, int> niter(map1.find("something"), map1.end());
+		ft::map<std::string, int> nfiter(fmap1.find("something"), fmap1.end());
+
+		ASSERT_EQUAL(niter, nfiter);
 
 
 		// (3) Copy constructor
 		std::map<std::string, int> copied(map1);
-		std::cout << "\ncopied = " << copied << endl;
-		std::cout << "map1 = " << map1 << endl;
-
-
 		ft::map<std::string, int> fcopied(fmap1);
-		std::cout << "\ncopied = " << fcopied << endl;
-		std::cout << "map1 = " << fmap1 << endl;
 		ASSERT_EQUAL(map1, fmap1);
 
 
-		//TODO: add back
-		//std::map<Point, double, PointCmp> mag;
+		std::map<Point, double, PointCmp> mag;
 
-		//mag[Point(5, -12)] = 13;
-		//mag[Point(3, 4)] = 5;
-		//mag[Point(-8, -15)] = 17;
+		mag[Point(5, -12)] = 13;
+		mag[Point(3, 4)] = 5;
+		mag[Point(-8, -15)] = 17;
 
-		//ft::map<Point, double, PointCmp> fmag;
+		ft::map<Point, double, PointCmp> fmag;
 
-		//fmag[Point(5, -12)] = 13;
-		//fmag[Point(3, 4)] = 5;
-		//fmag[Point(-8, -15)] = 17;
-		//ASSERT_EQUAL(fmag, mag);
-
+		fmag[Point(5, -12)] = 13;
+		fmag[Point(3, 4)] = 5;
+		fmag[Point(-8, -15)] = 17;
+		ASSERT_EQUAL(fmag, mag);
 	}
 }
+
 
 
 void all_map_tests(TestRunner &tr)
@@ -135,6 +128,7 @@ void test_all()
 {
 	TestRunner tr;
 	all_utils_test(tr);
+	all_map_tests(tr);
 	//all_vector_tests(tr);
 
 }

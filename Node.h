@@ -13,14 +13,28 @@ namespace ft
 	struct Node {
 		typedef ft::Node<V> self_type;
 		typedef V value_type;
+
 		explicit Node(const value_type& value, self_type* Tnull, self_type* parent = NULL)
-		: left(Tnull), right(Tnull), parent(parent ? parent : Tnull), data(value)
+		: left(Tnull), right(Tnull), parent(parent ? parent : Tnull), data(new value_type(value))
 		{}
 
-		Node(bool tnull)
-				: left(NULL), right(NULL), parent(NULL), data()
+		explicit Node(bool tnull)
+				: left(NULL), right(NULL), parent(NULL), data(NULL)
 		{
 
+		}
+
+		Node(const Node& node): data(NULL){
+			this = node;
+		}
+
+		Node& operator=(const Node& node){
+			delete data;
+			data = new Node(node.data);
+		}
+
+		~Node() {
+			delete data;
 		}
 
 		self_type* GetNode(tree_branch branch) {
@@ -34,14 +48,17 @@ namespace ft
 		self_type* right;
 		self_type* parent;
 		const value_type& val() const{
-			return data;
+			return *data;
 		}
 
 		value_type& ref_val(){
-			return data;
+			return *data;
 		}
 		void val(const value_type& val) const{
-			data = val;
+			if(data)
+				*data = val;
+			else
+				data = new value_type(val);
 		}
 
 
@@ -51,8 +68,9 @@ namespace ft
 			return (parent->left == this) ? parent->left : parent->right;
 		}
 
+
 	private:
-		value_type data;
+		value_type* data;
 	};
 
 
@@ -71,7 +89,6 @@ namespace ft
 
 	template<class T>
 	void copy_links(Node<T> *from, Node<T>* to){
-		//void copy_links(Node<T> *from, Node<T>* to, int* i){
 		to->parent = from->parent;
 		to->left = from->left;
 		to->right = from->right;
@@ -82,8 +99,6 @@ namespace ft
 		if(to->right->notNull())
 			to->right->parent = to;
 	}
-
-
 
 	template<class T>
 	Node<T>* GetMax(Node<T> *node){

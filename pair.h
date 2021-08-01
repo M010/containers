@@ -1,4 +1,6 @@
 
+#include <ostream>
+
 namespace ft
 {
 	template<class T1, class T2>
@@ -8,6 +10,12 @@ namespace ft
 		typedef T2  second_type;
 		T1 first;
 		T2 second;
+
+		friend std::ostream &operator<<(std::ostream &os, const pair &pair)
+		{
+			os << "f:" << pair.first << " s:" << pair.second;
+			return os;
+		}
 
 		pair(): first(), second() {}
 
