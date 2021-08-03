@@ -171,7 +171,7 @@ class vector {
     //fill (2)
     explicit vector(size_type n, const value_type &val = value_type(),
                     const allocator_type &alloc = allocator_type())
-        : size_(n), capacity_(n), _allocator(alloc), data_(NULL) {
+                    :   _allocator(alloc), data_(NULL),  size_(n),capacity_(n) {
         if (size_ == 0)
             return;
         data_ = _allocator.allocate(n);
@@ -184,15 +184,14 @@ class vector {
            const allocator_type &alloc = allocator_type(),
            typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0
     )
-        : _allocator(alloc), size_(0), capacity_(0), data_(NULL) {
-        int i = 10;
+    : _allocator(alloc), data_(NULL), size_(0), capacity_(0) {
         for (; first != last; first++) {
             this->push_back(*first);
         }
     }
     //copy (4)
     vector(const vector &x)
-        : _allocator(x._allocator), size_(0), capacity_(0), data_(NULL) {
+    : _allocator(x._allocator),  data_(NULL), size_(0), capacity_(0){
         *this = x;
     }
 

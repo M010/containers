@@ -2,7 +2,7 @@
 
 #include "utils.h"
 #include "map.hpp"
-#include "ft_vector.h"
+#include "vector.hpp"
 #include "utils.h"
 #include <sstream>
 #include <stdexcept>
@@ -107,6 +107,13 @@ ostream& operator << (ostream& os, const std::vector<T>& s) {
         os << *x;
     }
     return os << "}";
+}
+
+
+template <class T, class U>
+    ostream& operator << (ostream& os, const std::pair<T, U>& p) {
+   os << "[ " << p.first << " # " << p.second << " ]";
+    return os;
 }
 
 template <class T>

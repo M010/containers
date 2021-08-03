@@ -1,4 +1,4 @@
-#include "ft_vector.h"
+#include "vector.hpp"
 #include "test_runner.h"
 
 void ft_vector_tests() {
@@ -355,7 +355,6 @@ void ft_vector_tests() {
 
 		ASSERT_EQUAL(svect.size(), fvect.size());
 
-		size_t      cnt(0);
 		for (size_t i = 0; i < svect.size(); i++)
 		ASSERT_EQUAL(svect[i], fvect[i]);
 		std::cout << std::endl;
@@ -670,7 +669,7 @@ void reverse_iterator_test() {
 }
 
 template<class Container, class Container1>
-void n_fill(Container& container1, Container1& container2, int n = 10)
+void n_fill(Container& container1, Container1& container2)
 {
 	for (int i = 0; i < 10; ++i)
 	{

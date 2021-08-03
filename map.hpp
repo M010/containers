@@ -21,8 +21,8 @@ namespace ft
 	>
 	class map
 	{
-	public:
 
+	public:
 		typedef map<Key, T, Compare, Allocator> self_type;
 		typedef Key key_type;
 		typedef T mapped_type;
@@ -45,17 +45,29 @@ namespace ft
 	private:
 		key_compare _key_cmp;
 
-		bool _v_cmp_less(const value_type &lhs, const value_type &rhs) const
-		{
-			return _key_cmp(lhs.first, rhs.first);
-		}
+	    struct ValComp {
+            ValComp(key_compare key_cmp) : _key_cmp(key_cmp) {}
+            bool operator()(const value_type &lhs, const value_type &rhs) const
+	        {
+                return _key_cmp(lhs.first, rhs.first);
+	        }
+         private:
+            key_compare _key_cmp;
+        };
+
+        typedef ValComp value_compare;
+        value_compare _v_cmp_less;
+
+//		bool _v_cmp_less(const value_type &lhs, const value_type &rhs) const
+//		{
+//			return _key_cmp(lhs.first, rhs.first);
+//		}
 
 		bool _v_cmp(const value_type &lhs, const value_type &rhs) const
 		{
 			return !(_v_cmp_less(lhs, rhs) || _v_cmp_less(rhs, lhs));
 		}
 
-		typedef bool (&value_compare)(const value_type &lhs, const value_type &rhs);
 
 		allocator_type _alloc;
 		size_type _size;
@@ -93,6 +105,10 @@ namespace ft
 			}
 		}
 
+		static value_type make_val(const key_type& k){
+            return value_type(k , mapped_type());
+		}
+
 		ft::pair<node_type *, bool> _put(const value_type &val, node_type *&curr, node_type *parent = NULL)
 		{
 			//TODO: parrent is Tnull?
@@ -120,7 +136,7 @@ namespace ft
 				return _put(val, curr->right, curr);
 			else if (_v_cmp_less(val, curr->val()))
 				return _put(val, curr->left, curr);
-			return ft::make_pair(curr, false); //TODO: delete std
+			return ft::make_pair(curr, false);
 		}
 
 	public:
@@ -141,31 +157,31 @@ namespace ft
 				return _find_node(val, start->left);
 		}
 
-		node_type *_lower_bound(const value_type &val, node_type *start = NULL) const
+		node_type* _lower_bound(const value_type &val, node_type *start = NULL) const
 		{
 
 			if (start == NULL)
 				start = _root;
-			if (start->isNull() || start->val() == val)
+			if (start->isNull() || _v_cmp(start->val(),  val))
 				return start;
 
 			if (_v_cmp_less(start->val(), val))
 			{
 				if (start->right->isNull())
-					return start;
+					return increment(start);
 				return _lower_bound(val, start->right);
 			} else
 			{
 				if (start->left->isNull())
-					return increment(start);
+					return start;
 				return _lower_bound(val, start->left);
 			}
 		}
 
-		ft::pair<node_type *, node_type *> _equal_range(const value_type &val)
+		ft::pair<node_type *, node_type *> _equal_range(const value_type &val) const
 		{
 			node_type *node = _lower_bound(val);
-			if (node->notNull() && node->val() == val)
+			if (node->notNull() && _v_cmp(node->val(), val))
 				return ft::make_pair(node, increment(node));
 			return ft::make_pair(node, node);
 		};
@@ -249,7 +265,7 @@ namespace ft
 
 		explicit map(const key_compare &comp = key_compare(),
 					 const allocator_type &alloc = allocator_type())
-				: _size(0), _root(NULL), _key_cmp(comp), _alloc(alloc)
+					 : _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(NULL)
 		{
 			_root = _Leaf = new node_type(true);
 			_update_Leaf();
@@ -260,7 +276,7 @@ namespace ft
 			const key_compare &comp = key_compare(),
 			const allocator_type &alloc = allocator_type(),
 			typename enable_if<!is_integral<InputIterator>::value>::type * = 0) :
-				_size(0), _root(NULL), _key_cmp(comp), _alloc(alloc)
+			_key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(NULL)
 		{
 			_root = _Leaf = new node_type(true);
 			_update_Leaf();
@@ -268,7 +284,7 @@ namespace ft
 		}
 
 		map(const map &other) :
-				_size(0), _root(NULL), _key_cmp(other._key_cmp), _alloc(other._alloc)
+		_key_cmp(other._key_cmp), _v_cmp_less(_key_cmp), _alloc(other._alloc), _size(0), _root(NULL)
 		{
 			_root = _Leaf = new node_type(true);
 			_update_Leaf();
@@ -364,7 +380,7 @@ namespace ft
 
 		size_type max_size() const
 		{
-			return 42; //TODO
+		    return 461168601842738790; //TODO::!!
 		}
 
 		/*
@@ -390,14 +406,16 @@ namespace ft
 		{
 			ft::pair<iterator, bool> ret = _put(val, _root);
 			_update_Leaf();
-			return _put(val, _root);
+			return ret;
 		}
 
 		iterator insert(iterator hint, const value_type &value)
 		{
-			node_type *hint_node = hint.GetNode();
-			if (_v_cmp_less(*hint, value) && _v_cmp_less(value, *ft::next(hint))) //TODO:hard_test
-				return iterator(_put(value, hint_node).first);
+		    //TODO:: void hint
+		    (void)hint;
+			//node_type *hint_node = hint.GetNode();
+//			if (_v_cmp_less(*hint, value) && _v_cmp_less(value, *ft::next(hint))) //TODO:hard_test
+//				return iterator(_put(value, hint_node).first);
 			return iterator(insert(value).first);
 		}
 
@@ -459,34 +477,34 @@ namespace ft
 
 		iterator lower_bound(const key_type &k)
 		{
-			return iterator(_lower_bound(k));
+			return iterator(_lower_bound(make_val(k)));
 		}
 
 		const_iterator lower_bound(const key_type &k) const
 		{
-			return const_iterator(_lower_bound(k));
+			return const_iterator(_lower_bound(make_val(k)));
 		}
 
 		iterator upper_bound(const key_type &k)
 		{
-			return iterator(_equal_range(k).second);
+			return iterator(_equal_range(make_val(k)).second);
 		}
 
 		const_iterator upper_bound(const key_type &k) const
 		{
-			return const_iterator(_equal_range(k).second);
+			return const_iterator(_equal_range(make_val(k)).second);
 		}
 
 
 		ft::pair<iterator, iterator> equal_range(const key_type &k)
 		{
-			ft::pair<node_type *, node_type *> range = _equal_range(k);
+			ft::pair<node_type *, node_type *> range = _equal_range(make_val(k));
 			return ft::make_pair(iterator(range.first), iterator(range.second));
 		}
 
 		ft::pair<const_iterator, const_iterator> equal_range(const key_type &k) const
 		{
-			ft::pair<node_type *, node_type *> range = _equal_range(k);
+			ft::pair<node_type *, node_type *> range = _equal_range(make_val(k));
 			return ft::make_pair(const_iterator(range.first), const_iterator(range.second));
 		}
 

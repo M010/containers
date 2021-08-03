@@ -13,7 +13,7 @@ namespace ft
 
 		friend std::ostream &operator<<(std::ostream &os, const pair &pair)
 		{
-			os << "f:" << pair.first << " s:" << pair.second;
+			os << "[ " << pair.first << " # "  << pair.second << " ]";
 			return os;
 		}
 
@@ -36,8 +36,8 @@ namespace ft
 		pair(const pair<T, U>& other) : first(other.first), second(other.second) {
 		}
 
-		bool operator==(const pair &rhs) const;
-//		bool operator!=(const pair &rhs) const;
+		//bool operator==(const pair &rhs) const;
+		//bool operator!=(const pair &rhs) const;
 //		bool operator<(const pair &rhs) const;
 //		bool operator>(const pair &rhs) const;
 //		bool operator<=(const pair &rhs) const;

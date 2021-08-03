@@ -21,7 +21,7 @@ namespace ft
 		explicit Node(bool tnull)
 				: left(NULL), right(NULL), parent(NULL), data(NULL)
 		{
-
+		    (void)tnull;
 		}
 
 		Node(const Node& node): data(NULL){
@@ -108,7 +108,8 @@ namespace ft
 	template <class T>
 	Node<T>* inc_dec_algo(Node<T> *node, bool inc) {
 		enum tree_branch branch = !inc ? LEFT_BRANCH : RIGHT_BRANCH;
-		if(node->GetNode(branch)->notNull())
+		Node<T> * branch_node = node->GetNode(branch);
+		if(branch_node && branch_node->notNull())
 			return GetMinMaxAlgo(node->GetNode(branch), inc);
 
 		Node<T>* parent_node = node->parent;
