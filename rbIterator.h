@@ -67,5 +67,8 @@ namespace ft
 
 		reference operator*() { return const_cast<reference>(_node->val()); }
 		pointer operator->() { return &(_node->ref_val()); }
+
+		reference operator*() const { return const_cast<reference>(_node->val()); }
+		pointer operator->() const{ return &(_node->ref_val()); }
 	};
 }

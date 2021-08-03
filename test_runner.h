@@ -1,7 +1,7 @@
 #pragma once
 
 #include "utils.h"
-#include "ft_map.h"
+#include "map.hpp"
 #include "ft_vector.h"
 #include "utils.h"
 #include <sstream>
@@ -56,12 +56,12 @@ bool operator==(const ft::map<K, V, Cmp> lhs, const std::map<K, V, Cmp> rhs){
 			return false;
 	}
 
-//	typename std::map<K, V,Cmp>::const_reverse_iterator rsit = rhs.rbegin();
-//	for(typename ft::map<K, V,Cmp>::const_reverse_iterator rit = lhs.rbegin(); rit!=lhs.rend(); rsit++, rit++) {
-//		bool first_equal = (!rhs.key_comp()(rit->first, rsit->first) && !rhs.key_comp()(rsit->first, rit->first));
-//		if(!first_equal && !(rit->second == rsit->second))
-//			return false;
-//	}
+	typename std::map<K, V,Cmp>::const_reverse_iterator rsit = rhs.rbegin();
+	for(typename ft::map<K, V,Cmp>::const_reverse_iterator rit = lhs.rbegin(); rit!=lhs.rend(); rsit++, rit++) {
+		bool first_equal = (!rhs.key_comp()(rit->first, rsit->first) && !rhs.key_comp()(rsit->first, rit->first));
+		if(!first_equal && !(rit->second == rsit->second))
+			return false;
+	}
 	return true;
 }
 
@@ -80,12 +80,12 @@ bool operator==(const ft::map<K, V> lhs, const std::map<K, V> rhs){
 			return false;
 	}
 
-//	typename std::map<K, V>::const_reverse_iterator rsit = rhs.rbegin();
-//	for(typename ft::map<K, V>::const_reverse_iterator rit = lhs.rbegin(); rit!=lhs.rend(); rsit++, rit++) {
-//		if(!(rit->first == rsit->first) && !(rit->second == rsit->second))
-//			return false;
-//	}
-//
+	typename std::map<K, V>::const_reverse_iterator rsit = rhs.rbegin();
+	for(typename ft::map<K, V>::const_reverse_iterator rit = lhs.rbegin(); rit!=lhs.rend(); rsit++, rit++) {
+		if(!(rit->first == rsit->first) && !(rit->second == rsit->second))
+			return false;
+	}
+
 	return true;
 }
 
