@@ -1,4 +1,4 @@
-
+#pragma once
 #include <ostream>
 
 namespace ft {
@@ -9,18 +9,13 @@ struct pair {
     T1         first;
     T2         second;
 
-    friend std::ostream &operator<<(std::ostream &os, const pair &pair) {
-        os << "[ " << pair.first << " # " << pair.second << " ]";
-        return os;
-    }
-
     pair() : first(), second() {}
 
     template<class T, class U>
     pair(const T &a, const U &b): first(a), second(b) {}
 
     template<class T, class U>
-    pair &operator=(const pair <T, U> &other) {
+    pair &operator=(const pair<T, U> &other) {
         if (*this != &other) {
             first  = other.first;
             second = other.second;
@@ -80,5 +75,11 @@ pair<T1, T2> make_pair(T1 t, T2 u) {
     return pair<T1, T2>(t, u);
 }
 
+}
+
+template<class T, class U>
+std::ostream &operator<<(std::ostream &os, const ft::pair<T, U> &pair) {
+    os << "[ " << pair.first << " # " << pair.second << " ]";
+    return os;
 }
 

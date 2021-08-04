@@ -19,7 +19,10 @@ using std::endl;
 using std::cerr;
 
 class ostringstream;
+
+
 namespace test {
+
 template<class T>
 std::string to_string(const T &val) {
     std::ostringstream stream;

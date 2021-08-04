@@ -6,7 +6,7 @@ class reverse_iterator {
  protected:
     Iter current;
 
-    typedef iterator_traits <Iter> trait;
+    typedef iterator_traits<Iter> trait;
 
  public:
     typedef Iter                              iterator_type;
