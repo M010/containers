@@ -90,6 +90,65 @@ void rand_fill_maps(ft::map<int, int> &ft_, std::map<int, int> &st, int n) {
     }
 }
 
+void map_iterator_test() {
+    {
+
+    }
+
+    {
+        std::map<std::string, int> map1;
+        map1["something"]  = 69;
+        map1["anything"]   = 199;
+        map1["that thing"] = 50;
+        std::cout << "map1 = " << map1 << endl;
+
+        ft::map<std::string, int> fmap1;
+        fmap1["something"]  = 69;
+        fmap1["anything"]   = 199;
+        fmap1["that thing"] = 50;
+
+        ft::map<std::string, int>::iterator  fit = fmap1.begin();
+        std::map<std::string, int>::iterator it  = map1.begin();
+        while (fit != fmap1.end()) {
+            ASSERT_EQUAL(*(fit++), *(it++))
+        }
+
+        fit = fmap1.end();
+        it  = map1.end();
+        fmap1.print_map();
+        while (fit != fmap1.begin()) {
+            ASSERT_EQUAL(*(--fit), *(--it))
+        }
+    }
+    {
+        std::map<std::string, int> map1;
+        map1["something"]  = 69;
+        map1["anything"]   = 199;
+        map1["that thing"] = 50;
+        std::cout << "map1 = " << map1 << endl;
+
+        ft::map<std::string, int> fmap1;
+        fmap1["something"]  = 69;
+        fmap1["anything"]   = 199;
+        fmap1["that thing"] = 50;
+
+        ft::map<std::string, int>::reverse_iterator  fit = fmap1.rbegin();
+        std::map<std::string, int>::reverse_iterator it  = map1.rbegin();
+        while (fit != fmap1.rend()) {
+            ASSERT_EQUAL(*(fit++), *(it++))
+        }
+
+        fit = fmap1.rend();
+        it  = map1.rend();
+
+        while (fit != fmap1.rbegin()) {
+            ASSERT_EQUAL(*(--fit), *(--it))
+        }
+
+    }
+
+}
+
 void map_simple_bounds_test() {
     {
         std::map<char, int>           mymap;
@@ -224,7 +283,7 @@ void map_erase_test() {
 
         ASSERT_EQUAL(mymap, fmymap);
 
-        it = mymap.find('b');
+        it  = mymap.find('b');
         fit = fmymap.find('b');
         ASSERT_EQUAL(*fit, *it);
         mymap.erase(it);                   // erasing by iterator
@@ -254,9 +313,8 @@ void map_erase_test() {
 
             rand_fill_maps(fmap, smap, 500);
             ASSERT_EQUAL(fmap, smap);
-            for(int k = 0; k < 10; k++)
-            {
-                int                          f   = rand() % 1300;
+            for (int k = 0; k < 10; k++) {
+                int f = rand() % 1300;
                 fmap.erase(fmap.lower_bound(f), fmap.upper_bound(f + 50));
                 smap.erase(smap.lower_bound(f), smap.upper_bound(f + 50));
                 ASSERT_EQUAL(fmap, smap);
@@ -271,26 +329,51 @@ void map_erase_test() {
 
             rand_fill_maps(fmap, smap, 1000);
             ASSERT_EQUAL(fmap, smap);
-            for(int k = 0; k < 100; k++)
-            {
-                int                          f   = rand() % 1300;
-                fmap.erase(fmap.lower_bound(f));
-                smap.erase(smap.lower_bound(f));
+            for (int k = 0; k < 100; k++) {
+                int f = rand() % 1300;
+                if (smap.lower_bound(f) != smap.end()) {
+                    fmap.erase(fmap.lower_bound(f));
+                    smap.erase(smap.lower_bound(f));
+                }
                 ASSERT_EQUAL(fmap, smap);
             }
         }
     }
 
     {
+        for (int i = 0; i < 100; i++) {
+            std::map<int, int> smap;
+            ft::map<int, int>  fmap;
 
+            rand_fill_maps(fmap, smap, 1000);
+            ASSERT_EQUAL(fmap, smap);
+            for (int k = 0; k < 10; k++) {
+                int f = rand() % 1300;
+                if (smap.lower_bound(f) != smap.end()) {
+                    fmap.erase(fmap.lower_bound(f), fmap.lower_bound(f + 100));
+                    smap.erase(smap.lower_bound(f), smap.lower_bound(f + 100));
+                }
+                ASSERT_EQUAL(fmap, smap);
+            }
+        }
     }
 
+    {
+        for (int i = 0; i < 100; i++) {
+            std::map<int, int> smap;
+            ft::map<int, int>  fmap;
+
+            rand_fill_maps(fmap, smap, 1000);
+            ASSERT_EQUAL(fmap, smap);
+            for (int k = 0; k < 100; k++) {
+                int f = rand() % 1300;
+                    fmap.erase(f);
+                    smap.erase(f);
+                ASSERT_EQUAL(fmap, smap);
+            }
+        }
+    }
 }
-
-
-
-
-
 
 #define T1 int
 #define T2 std::string
@@ -298,29 +381,26 @@ typedef ft::pair<const T1, T2> T3;
 
 static int iter = 0;
 
-template <typename MAP, typename U>
-MAP	ft_erase(MAP &mp, U param)
-{
+template<typename MAP, typename U>
+MAP ft_erase(MAP &mp, U param) {
     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
     mp.erase(param);
     return mp;
 }
 
-template <typename MAP, typename U, typename V>
-MAP	ft_erase(MAP &mp, U param, V param2)
-{
+template<typename MAP, typename U, typename V>
+MAP ft_erase(MAP &mp, U param, V param2) {
     std::cout << "\t-- [" << iter++ << "] --" << std::endl;
     mp.erase(param, param2);
     return mp;
 }
 
-void		sample_erase_test(void)
-{
-    std::list<T3> lst;
-    unsigned int lst_size = 10;
-    for (unsigned int i = 0; i < lst_size; ++i)
+void sample_erase_test(void) {
+    std::list<T3>     lst;
+    unsigned int      lst_size = 10;
+    for (unsigned int i        = 0; i < lst_size; ++i)
         lst.push_back(T3(i, std::string((lst_size - i), i + 65)));
-    ft::map<T1, T2> mp(lst.begin(), lst.end());
+    ft::map<T1, T2>   mp(lst.begin(), lst.end());
 
     ft_erase(mp, ++mp.begin());
 
@@ -328,7 +408,7 @@ void		sample_erase_test(void)
     ft_erase(mp, --mp.end());
 
     ft_erase(mp, mp.begin(), ++(++(++mp.begin())));
-mp.print_map();
+    mp.print_map();
     ft::map<T1, T2>::iterator mit = mp.end();
     mit--;
     mit--;
@@ -407,9 +487,10 @@ void is_empty(T const &mp) {
 
 void all_map_tests(TestRunner &tr) {
     RUN_TEST(tr, map_constructor_tests);
-    RUN_TEST(tr,sample_erase_test);
-    RUN_TEST(tr, map_erase_test);
+    RUN_TEST(tr, map_iterator_test);
+    RUN_TEST(tr, sample_erase_test);
     RUN_TEST(tr, map_simple_bounds_test);
+    RUN_TEST(tr, map_erase_test);
 }
 
 template<class T>
@@ -464,44 +545,6 @@ int main() {
     std::srand(time(0));
     test_all();
 
-    std::set<int>    test_set;
-    std::vector<int> test_vec;
-
-    for (int i = 0; i < 10; i++)
-        test_set.insert(i);
-    test_set.max_size();
-//	std::set<int>::iterator iti = test_set.begin();
-    //typedef ft::map<int, int>::iterator map_iter;
-    //std::vector<map_iter> iters;
-    //srand(time(0));
-    //for(int i = 0; i < 10; i++)
-    //{
-    //	iters.push_back(test._insert(rand() % 100));
-    //}
-    //test.print_map();
-    //std::cerr << "iter_test:" << endl;
-    //for(map_iter it = test.begin(); it != test.end(); it++)
-    //{
-    //	std::cerr << *it << " " ;
-    //}
-    //std::cerr << endl << "iter_test:end" << endl;
-
-    //ft::vector<std::string> tmp(3, "hi");
-    //std::cout << tmp << std::endl;
-    //	common stuff
-    //	iostreamhack();
-    // std::srand(std::time(NULL));
-    // ft::vector<std::string> asdf(12, "asdf");
-    // std::vector<std::string> sadf(12, "sdf");
-    // const ft::vector<std::string> fcont(sadf.begin(), sadf.end());
-    //    fcont.rend();
-    //	a lot of data test: requires more than 320mb of ram with valgrind memcheck
-    //	and more than 640mb of ram with -fsanitize=address (asan + lsan on linux)
-    //	changing INSANITYSIZE changes ram usage accordingly
-
-//	std::pair<const int, int> p = std::pair<int, int>(42, 42);
-//	ft::pair<const int, int> d = ft::pair<int, int>(42, 42);
-    std::map<int, int> mp;
-    mp.max_size();
+    std::pair<int, int> p;
     return (0);
 }

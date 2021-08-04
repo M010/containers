@@ -114,20 +114,20 @@ namespace ft
 			//TODO: parrent is Tnull?
 			if (curr == NULL || curr->isNull())
 			{
-				bool first_insert = !_root || _root->isNull();
+	//			bool first_insert = !_root || _root->isNull();
 				curr = new node_type(val, _Leaf, parent);
-				if (first_insert)
-				{
-					_most_left = curr;
-					_most_right = curr;
-				} else if (_v_cmp_less(curr->val(), _most_left->val()))
-				{
-					_most_left = curr;
-				} else if (_v_cmp_less(_most_right->val(), curr->val()))
-				{
-					_most_right = curr;
-				}
-				_Leaf->left = _Leaf->parent = _most_right; //TODO:
+//				if (first_insert)
+//				{
+//				//	_most_left = curr;
+//				//	_most_right = curr;
+//				} else if (_v_cmp_less(curr->val(), _most_left->val()))
+//				{
+//					_most_left = curr;
+//				} else if (_v_cmp_less(_most_right->val(), curr->val()))
+//				{
+//					_most_right = curr;
+//				}
+				//_Leaf->parent = _most_right; //TODO:
 				_size++;
 				return ft::make_pair(curr, true);
 			}
@@ -228,10 +228,15 @@ namespace ft
 			node_type *found_elem = _find_node(val);
 			if (!found_elem || found_elem->isNull())
 				return 0;
-			delete _exclude_node(found_elem);
-			_update_Leaf();
-			_size--;
-			return 1;
+            _delete_elem(found_elem);
+            return 1;
+        }
+
+        size_t _delete_elem(node_type* node){
+		    delete _exclude_node(node);
+		    _update_Leaf();
+		    _size--;
+		    return 1;
 		}
 
 
@@ -267,7 +272,7 @@ namespace ft
 					 const allocator_type &alloc = allocator_type())
 					 : _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(NULL)
 		{
-			_root = _Leaf = new node_type(true);
+			_root = _Leaf = new node_type();
 			_update_Leaf();
 		}
 
@@ -278,7 +283,7 @@ namespace ft
 			typename enable_if<!is_integral<InputIterator>::value>::type * = 0) :
 			_key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(NULL)
 		{
-			_root = _Leaf = new node_type(true);
+			_root = _Leaf = new node_type();
 			_update_Leaf();
 			this->insert(first, last);
 		}
@@ -286,7 +291,7 @@ namespace ft
 		map(const map &other) :
 		_key_cmp(other._key_cmp), _v_cmp_less(_key_cmp), _alloc(other._alloc), _size(0), _root(NULL)
 		{
-			_root = _Leaf = new node_type(true);
+			_root = _Leaf = new node_type();
 			_update_Leaf();
 			*this = other;
 		}
@@ -428,12 +433,12 @@ namespace ft
 
 		void erase(iterator position)
 		{
-			_delete_elem(*position);
+			_delete_elem(position.GetNode()); // TODO: optimize
 		}
 
 		size_type erase(const key_type &k)
 		{
-			return _delete_elem(k);
+			return _delete_elem(make_val(k));
 		}
 
 		void erase(iterator first, iterator last)
@@ -507,6 +512,28 @@ namespace ft
 			ft::pair<node_type *, node_type *> range = _equal_range(make_val(k));
 			return ft::make_pair(const_iterator(range.first), const_iterator(range.second));
 		}
+        friend bool operator==(const map &lhs, const map &rhs) {
+		    if (lhs.size() != rhs.size())
+		        return false;
+		    return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+        }
 
-	};
+        friend bool operator!=(const map &lhs, const map &rhs) {
+            return !(rhs == lhs);
+        }
+
+        friend bool operator<(const map &lhs, const map &rhs) {
+            return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+        }
+
+        friend bool operator>(const map &lhs, const map &rhs) {
+            return rhs < lhs;
+        }
+        friend bool operator<=(const map &lhs, const map &rhs) {
+            return !(rhs < lhs);
+        }
+        friend bool operator>=(const map &lhs, const map &rhs) {
+            return !(lhs < rhs);
+        }
+    };
 }

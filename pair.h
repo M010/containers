@@ -36,54 +36,54 @@ namespace ft
 		pair(const pair<T, U>& other) : first(other.first), second(other.second) {
 		}
 
-		//bool operator==(const pair &rhs) const;
-		//bool operator!=(const pair &rhs) const;
-//		bool operator<(const pair &rhs) const;
-//		bool operator>(const pair &rhs) const;
-//		bool operator<=(const pair &rhs) const;
-//		bool operator>=(const pair &rhs) const;
+		bool operator==(const pair &rhs) const;
+		bool operator!=(const pair &rhs) const;
+		bool operator<(const pair &rhs) const;
+		bool operator>(const pair &rhs) const;
+		bool operator<=(const pair &rhs) const;
+		bool operator>=(const pair &rhs) const;
 	};
 
-//	template<class T1, class T2>
-//	bool pair<T1, T2>::operator<(const pair &rhs) const
-//	{
-//		if (first < rhs.first)
-//			return true;
-//		if (rhs.first < first)
-//			return false;
-//		return second < rhs.second;
-//	}
-//
-//	template<class T1, class T2>
-//	bool pair<T1, T2>::operator>(const pair &rhs) const
-//	{
-//		return rhs < *this;
-//	}
-//
-//	template<class T1, class T2>
-//	bool pair<T1, T2>::operator<=(const pair &rhs) const
-//	{
-//		return !(rhs < *this);
-//	}
-//
-//	template<class T1, class T2>
-//	bool pair<T1, T2>::operator>=(const pair &rhs) const
-//	{
-//		return !(*this < rhs);
-//	}
+	template<class T1, class T2>
+	bool pair<T1, T2>::operator<(const pair &rhs) const
+	{
+		if (first < rhs.first)
+			return true;
+		if (rhs.first < first)
+			return false;
+		return second < rhs.second;
+	}
 
-//	template<class T1, class T2>
-//	bool pair<T1, T2>::operator==(const pair &rhs) const
-//	{
-//		return first == rhs.first &&
-//			   second == rhs.second;
-//	}
-//
-//	template<class T1, class T2>
-//	bool pair<T1, T2>::operator!=(const pair &rhs) const
-//	{
-//		return !(rhs == *this);
-//	}
+	template<class T1, class T2>
+	bool pair<T1, T2>::operator>(const pair &rhs) const
+	{
+		return rhs < *this;
+	}
+
+	template<class T1, class T2>
+	bool pair<T1, T2>::operator<=(const pair &rhs) const
+	{
+		return !(rhs < *this);
+	}
+
+	template<class T1, class T2>
+	bool pair<T1, T2>::operator>=(const pair &rhs) const
+	{
+		return !(*this < rhs);
+	}
+
+	template<class T1, class T2>
+	bool pair<T1, T2>::operator==(const pair &rhs) const
+	{
+		return first == rhs.first &&
+			   second == rhs.second;
+	}
+
+	template<class T1, class T2>
+	bool pair<T1, T2>::operator!=(const pair &rhs) const
+	{
+		return !(rhs == *this);
+	}
 
 
 	template< class T1, class T2 >
