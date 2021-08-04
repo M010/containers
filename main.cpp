@@ -367,8 +367,8 @@ void map_erase_test() {
             ASSERT_EQUAL(fmap, smap);
             for (int k = 0; k < 100; k++) {
                 int f = rand() % 1300;
-                    fmap.erase(f);
-                    smap.erase(f);
+                fmap.erase(f);
+                smap.erase(f);
                 ASSERT_EQUAL(fmap, smap);
             }
         }
@@ -544,13 +544,14 @@ int main() {
     std::srand(time(0));
     test_all();
 
-    ft::vector<int> m;
-    m.push_back(1);
+    ft::map<int, int>  mp;
+    std::map<int, int> smp;
 
-    const ft::vector<int> c(m);
-    c.back();
-    ft::vector<int>::const_reverse_iterator mit = c.rbegin();
-    std::cout << *mit;
+    std::map<int, int>::const_iterator       site(smp.begin());
+    const std::map<int, int>::const_iterator scite(site);
+
+    ft::map<int, int>::const_iterator       ite(mp.begin());
+    const ft::map<int, int>::const_iterator cite(ite);
 
 //    std::pair<int, int> p;
 

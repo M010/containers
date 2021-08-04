@@ -87,54 +87,41 @@ class reverse_iterator {
         return *this;
     }
 
-    reference
-    operator[](difference_type n) const { return *(*this + n); }
-    //TODO:delete
-//	private:
-//		template<typename _Tp>
-//		static _Tp *
-//		_S_to_pointer(_Tp *__p)
-//		{ return __p; }
-//
-//		template<typename _Tp>
-//		static pointer
-//		_S_to_pointer(_Tp __t)
-//		{ return __t.operator->(); }
+    reference operator[](difference_type n) const { return *(*this + n); }
 };
 
 template<typename Iter>
-inline bool
+bool
 operator==(const reverse_iterator<Iter> &lhs,
            const reverse_iterator<Iter> &rhs) { return lhs.base() == rhs.base(); }
 
 template<typename Iter>
-inline bool
+bool
 operator<(const reverse_iterator<Iter> &lhs,
           const reverse_iterator<Iter> &rhs) { return rhs.base() < lhs.base(); }
 
 template<typename Iter>
-inline bool
+bool
 operator!=(const reverse_iterator<Iter> &lhs,
            const reverse_iterator<Iter> &rhs) { return !(lhs == rhs); }
 
 template<typename Iter>
-inline bool
+bool
 operator>(const reverse_iterator<Iter> &lhs,
           const reverse_iterator<Iter> &rhs) { return rhs < lhs; }
 
 template<typename Iter>
-inline bool
+bool
 operator<=(const reverse_iterator<Iter> &lhs,
            const reverse_iterator<Iter> &rhs) { return !(rhs < lhs); }
 
 template<typename Iter>
-inline bool
+bool
 operator>=(const reverse_iterator<Iter> &lhs,
            const reverse_iterator<Iter> &rhs) { return !(lhs < rhs); }
 
 template<typename IterL, typename IterR>
-inline bool
-operator==(const reverse_iterator<IterL> &lhs,
+bool operator==(const reverse_iterator<IterL> &lhs,
            const reverse_iterator<IterR> &rhs) { return lhs.base() == rhs.base(); }
 
 template<typename IterL, typename IterR>
