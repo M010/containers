@@ -517,9 +517,8 @@ void all_utils_test(TestRunner &tr) {
 void test_all() {
     TestRunner tr;
     all_utils_test(tr);
-    all_map_tests(tr);
-    //all_vector_tests(tr);
-
+    all_vector_tests(tr);
+    //all_map_tests(tr);
 }
 
 struct Cry {
@@ -545,6 +544,19 @@ int main() {
     std::srand(time(0));
     test_all();
 
-    std::pair<int, int> p;
+    ft::vector<int> m;
+    m.push_back(1);
+
+    const ft::vector<int> c(m);
+    c.back();
+    ft::vector<int>::const_reverse_iterator mit = c.rbegin();
+    std::cout << *mit;
+
+//    std::pair<int, int> p;
+
+//    std::vector<const std::string>::const_iterator::value_type a= "T";
+//    std::vector<const std::string>::const_iterator::difference_type b = 42;
+//    std::vector<const std::string>::const_iterator::reference c = 42;
+//    std::vector<const std::string>::const_iterator::pointer d = ;
     return (0);
 }

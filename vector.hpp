@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstddef>
 #include "utils.h"
+#include "reverse_iterator.h"
 
 namespace ft {
 template<class T,
@@ -12,145 +13,18 @@ template<class T,
 class vector {
 
  public:
-    typedef T                                      value_type;
-    typedef Allocator                              allocator_type;
-    typedef typename allocator_type::reference     reference;
-    typedef typename allocator_type::reference     const_reference;
-    typedef typename allocator_type::pointer       pointer;
-    typedef typename allocator_type::const_pointer const_pointer;
+    typedef T                                        value_type;
+    typedef Allocator                                allocator_type;
+    typedef typename allocator_type::reference       reference;
+    typedef typename allocator_type::const_reference const_reference;
+    typedef typename allocator_type::pointer         pointer;
+    typedef typename allocator_type::const_pointer   const_pointer;
 
-    class iterator :
-        public std::iterator<std::random_access_iterator_tag,
-                             value_type,
-                             ptrdiff_t,
-                             pointer,
-                             reference> {
-     public:
-        typedef int      difference_type;
-        typedef iterator self_type;
-        iterator() : ptr_(NULL) {}
-        iterator(pointer ptr) : ptr_(ptr) {}
-        self_type& operator++() {
-			ptr_++;
-			return *this;
-		}
-		self_type operator++(int) {
-			self_type i = *this;
-			ptr_++;
-			return i;
-		}
-		self_type operator--() {
-			ptr_--;
-			return *this;
-		}
-		self_type operator--(int) {
-			self_type i = *this;
-			ptr_--;
-			return i;
-		}
-		const self_type &operator+=(difference_type n) {
-            ptr_ += n;
-            return *this;
-        }
-        const self_type &operator-=(difference_type n) {
-            ptr_ -= n;
-            return *this;
-        }
-        const self_type &operator+(difference_type n) {
-            self_type tmp = *this;
-            return tmp += n;
-        }
-        friend const self_type &operator+(difference_type rhs, const self_type &lhs) {
-            self_type tmp = lhs;
-            return tmp += rhs;
-        }
-        const self_type &operator-(difference_type n) {
-            self_type tmp = *this;
-            return tmp -= n;
-        }
-        difference_type operator-(self_type rhs) { return this->ptr_ - rhs.ptr_; } // TODO :: test?
-        const value_type &operator[](difference_type n) { return *(*this + n); };
-        value_type &operator[](difference_type n) const { return *(*this + n); };
-
-        reference operator*() { return *ptr_; }
-        pointer operator->() { return ptr_; }
-
-        bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
-        bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
-        bool operator<(const self_type &rhs) const { return ptr_ < rhs.ptr_; }
-        bool operator>(const self_type &rhs) const { return rhs < *this; }
-        bool operator<=(const self_type &rhs) const { return !(rhs < *this); }
-        bool operator>=(const self_type &rhs) const { return !(*this < rhs); }
-     private:
-        pointer ptr_;
-    };
-    class const_iterator : public std::iterator<std::random_access_iterator_tag,
-                                                value_type,
-                                                ptrdiff_t,
-                                                pointer,
-                                                reference> {
-     public:
-        typedef int            difference_type;
-        typedef const_iterator self_type;
-
-        const_iterator() : ptr_(NULL) {}
-        const_iterator(pointer ptr) : ptr_(ptr) {}
-
-		self_type& operator++() { ptr_++; return *this;}
-		self_type operator++(int) {
-			self_type i = *this;
-			ptr_++;
-			return i;
-		}
-		self_type& operator--() {
-			ptr_--;
-			return *this;
-		}
-		self_type operator--(int) {
-			self_type i = *this;
-			ptr_--;
-			return i;
-		}
-
-        const self_type &operator+=(difference_type n) {
-            ptr_ += n;
-            return *this;
-        }
-        const self_type &operator-=(difference_type n) {
-            ptr_ -= n;
-            return *this;
-        }
-        const self_type &operator+(difference_type n) {
-            self_type tmp = *this;
-            return tmp += n;
-        }
-        const self_type &operator-(difference_type n) {
-            self_type tmp = *this;
-            return tmp -= n;
-        }
-
-        friend const self_type &operator+(difference_type rhs, const self_type &lhs) {
-            self_type tmp = lhs;
-            return rhs += rhs;
-        }
-
-        difference_type operator-(self_type rhs) { return this->ptr_ - rhs.ptr_; } // TODO :: test?
-        const value_type &operator[](difference_type n) const { return *(*this + n); };
-        const_reference operator*() { return *ptr_; }
-        const_pointer operator->() { return ptr_; }
-        bool operator==(const self_type &rhs) { return ptr_ == rhs.ptr_; }
-        bool operator!=(const self_type &rhs) { return ptr_ != rhs.ptr_; }
-        bool operator<(const self_type &rhs) const { return ptr_ < rhs.ptr_; }
-        bool operator>(const self_type &rhs) const { return rhs < *this; }
-        bool operator<=(const self_type &rhs) const { return !(rhs < *this); }
-        bool operator>=(const self_type &rhs) const { return !(*this < rhs); }
-     private:
-        pointer ptr_;
-    };
-
-    typedef std::reverse_iterator<iterator>       reverse_iterator;
-    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-    typedef size_t                                size_type;
+    typedef pointer                              iterator;
+    typedef const_pointer                        const_iterator;
+    typedef ft::reverse_iterator<iterator>       reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef size_t                               size_type;
 
  private:
     allocator_type _allocator;
@@ -171,7 +45,7 @@ class vector {
     //fill (2)
     explicit vector(size_type n, const value_type &val = value_type(),
                     const allocator_type &alloc = allocator_type())
-                    :   _allocator(alloc), data_(NULL),  size_(n),capacity_(n) {
+        : _allocator(alloc), data_(NULL), size_(n), capacity_(n) {
         if (size_ == 0)
             return;
         data_ = _allocator.allocate(n);
@@ -184,14 +58,14 @@ class vector {
            const allocator_type &alloc = allocator_type(),
            typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0
     )
-    : _allocator(alloc), data_(NULL), size_(0), capacity_(0) {
+        : _allocator(alloc), data_(NULL), size_(0), capacity_(0) {
         for (; first != last; first++) {
             this->push_back(*first);
         }
     }
     //copy (4)
     vector(const vector &x)
-    : _allocator(x._allocator),  data_(NULL), size_(0), capacity_(0){
+        : _allocator(x._allocator), data_(NULL), size_(0), capacity_(0) {
         *this = x;
     }
 
@@ -269,9 +143,9 @@ class vector {
 
     //single element (1)
     iterator insert(iterator position, const value_type &val) {
-    	ptrdiff_t element_index = position - begin();
+        ptrdiff_t element_index = position - begin();
         this->reserve(size() + 1);
-        pointer pos = data_ + element_index ;
+        pointer pos = data_ + element_index;
         _move_in_place(pos + 1, pos, data_ + size());
         _construct_one(pos, val);
         size_++;
@@ -280,24 +154,27 @@ class vector {
 
     //fill (2)
     void insert(iterator position, size_type n, const value_type &val) {
-		ptrdiff_t element_index =  position - begin();
-		this->reserve(size() + n);
+        ptrdiff_t element_index = position - begin();
+        this->reserve(size() + n);
         pointer start_position = data_ + element_index;
         _move_in_place(start_position + n, start_position, &(*end()));
         _construct_n(start_position, n, val);
         size_ += n;
     }
+
     //range (3)
     template<class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last,
-				typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0) {
-    	ptrdiff_t n = std::distance(first, last);
-		ptrdiff_t element_index =  position - begin();
-		this->reserve(size() + n);
-		pointer start_position = data_ + element_index;
-		_move_in_place(start_position + n, start_position, &(*end()));
-		for(pointer walker = start_position; first != last; walker++ ,first++)
-			_construct_one(walker, *first);
+                typename enable_if<!is_integral<InputIterator>::value>::type * = 0) {
+        ptrdiff_t n             = ft::distance(first, last);
+        ptrdiff_t element_index = position - begin();
+        this->reserve(size() + n);
+        pointer start_position = data_ + element_index;
+        _move_in_place(start_position + n, start_position, &(*end()));
+        for (pointer walker = start_position; first != last; walker++, first++) {
+            _construct_one(walker, *first);
+        }
+        size_ += n;
     }
 
 /*
@@ -333,11 +210,11 @@ class vector {
     }
 
     reference back() {
-        return *(rend());
+        return *(rbegin());
     }
 
     const_reference back() const {
-        return *(rend());
+        return *(rbegin());
     }
 /*
  *  Capacity
@@ -406,11 +283,11 @@ class vector {
     }
 
     const_reverse_iterator rbegin() const {
-        return std::reverse_iterator<const_iterator>(end());
+        return const_reverse_iterator(end());
     }
 
     const_reverse_iterator rend() const {
-        return std::reverse_iterator<const_iterator>(begin());
+        return const_reverse_iterator(begin());
     }
 
 /*
