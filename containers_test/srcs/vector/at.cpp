@@ -16,6 +16,8 @@ int		main(void)
 
 	TESTED_NAMESPACE::vector<TESTED_TYPE> const vct_c(vct);
 
+    std::cout << "size(): " << vct.size() << " " << vct_c.size() << std::endl;
+
 	std::cout << "front(): " << vct.front() << " " << vct_c.front() << std::endl;
 	std::cout << "back(): " << vct.back() << " " <<  vct_c.back() << std::endl;
 

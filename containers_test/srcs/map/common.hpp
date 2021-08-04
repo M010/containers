@@ -22,7 +22,6 @@ template <typename T_MAP>
 void	printSize(T_MAP const &mp, bool print_content = 1)
 {
 	std::cout << "size: " << mp.size() << std::endl;
-	std::cout << "max_size: " << mp.max_size() << std::endl;
 	if (print_content)
 	{
 		typename T_MAP::const_iterator it = mp.begin(), ite = mp.end();

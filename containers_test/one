@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/zsh
 
 if [ $# -eq 0 ]; then
 	echo "Usage: $0 <file> [namespace=ft] [path/to/includes=..]"
