@@ -1,6 +1,6 @@
 #pragma once
-
 #include "vector.hpp"
+
 namespace ft {
 template<
     class T,
@@ -27,19 +27,19 @@ class stack {
         return lhs._container == rhs._container;
     }
     friend bool operator!=(const stack &lhs, const stack &rhs) {
-        return rhs != lhs;
+        return rhs._container != lhs._container;
     }
     friend bool operator<(const stack &lhs, const stack &rhs) {
         return lhs._container < rhs._container;
     }
     friend bool operator>(const stack &lhs, const stack &rhs) {
-        return lhs > rhs;
+        return lhs._container > rhs._container;
     }
     friend bool operator<=(const stack &lhs, const stack &rhs) {
-        return rhs <= lhs;
+        return lhs._container <= rhs._container;
     }
     friend bool operator>=(const stack &lhs, const stack &rhs) {
-        return lhs >= rhs;
+        return lhs._container >= rhs._container;
     }
 };
 }

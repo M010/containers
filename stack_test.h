@@ -1,6 +1,6 @@
 #pragma once
 #include "test_runner.h"
-#include "stack.h"
+#include "stack.hpp"
 #include <stack>
 #include <list>
 
