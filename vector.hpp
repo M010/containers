@@ -59,9 +59,7 @@ class vector {
            typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0
     )
         : _allocator(alloc), data_(NULL), size_(0), capacity_(0) {
-        for (; first != last; first++) {
-            this->push_back(*first);
-        }
+        insert(begin(), first, last);
     }
     //copy (4)
     vector(const vector &x)
@@ -117,7 +115,7 @@ class vector {
 
     template<class InputIterator>
     void assign(InputIterator first, InputIterator last,
-                typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0) {
+                typename enable_if<!is_integral<InputIterator>::value>::type* = 0) {
         *this = vector<T, Allocator>(first, last);
     }
 
@@ -200,7 +198,7 @@ class vector {
             throw std::out_of_range("vector");
         return (*this)[n];
     }
-//TODO: maybe front is not in container
+
     reference front() {
         return *begin();
     }
@@ -210,12 +208,13 @@ class vector {
     }
 
     reference back() {
-        return *(rbegin());
+        return *rbegin();
     }
 
     const_reference back() const {
-        return *(rbegin());
+        return *rbegin();
     }
+
 /*
  *  Capacity
  */
@@ -324,7 +323,6 @@ class vector {
     }
 
  private:
-
     void _construct_one(pointer elem, const value_type &val = value_type()) {
         _allocator.construct(elem, val);
     }
