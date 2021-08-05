@@ -518,10 +518,10 @@ void all_utils_test(TestRunner &tr) {
 
 void test_all() {
     TestRunner tr;
-    all_stack_test(tr);
-    all_utils_test(tr);
+    //all_stack_test(tr);
+    //all_utils_test(tr);
     all_vector_tests(tr);
-    all_map_tests(tr);
+   // all_map_tests(tr);
 }
 
 struct Cry {
@@ -547,20 +547,5 @@ int main() {
     std::srand(time(0));
     test_all();
 
-//    ft::map<int, int>  mp;
-//    std::map<int, int> smp;
-//
-//    std::map<int, int>::const_iterator       site(smp.begin());
-//    const std::map<int, int>::const_iterator scite(site);
-//
-//    ft::map<int, int>::const_iterator       ite(mp.begin());
-//    const ft::map<int, int>::const_iterator cite(ite);
-
-//    std::pair<int, int> p;
-
-//    std::vector<const std::string>::const_iterator::value_type a= "T";
-//    std::vector<const std::string>::const_iterator::difference_type b = 42;
-//    std::vector<const std::string>::const_iterator::reference c = 42;
-//    std::vector<const std::string>::const_iterator::pointer d = ;
     return (0);
 }

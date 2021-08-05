@@ -100,20 +100,7 @@ class map {
     ft::pair<node_type *, bool> _put(const value_type &val, node_type *&curr, node_type *parent = NULL) {
         //TODO: parrent is Tnull?
         if (curr == NULL || curr->isNull()) {
-            //			bool first_insert = !_root || _root->isNull();
             curr = new node_type(val, _Leaf, parent);
-//				if (first_insert)
-//				{
-//				//	_most_left = curr;
-//				//	_most_right = curr;
-//				} else if (_v_cmp_less(curr->val(), _most_left->val()))
-//				{
-//					_most_left = curr;
-//				} else if (_v_cmp_less(_most_right->val(), curr->val()))
-//				{
-//					_most_right = curr;
-//				}
-            //_Leaf->parent = _most_right; //TODO:
             _size++;
             return ft::make_pair(curr, true);
         }
@@ -131,8 +118,7 @@ class map {
 
     node_type *_find_node(const value_type &val, node_type *start = NULL) const {
 
-        if (start == NULL)
-            start = _root;
+        start = start ? start : _root;
         if (start->isNull() || _v_cmp(start->val(), val))
             return start;
 

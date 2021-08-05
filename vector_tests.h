@@ -5,54 +5,34 @@ void ft_vector_tests() {
     {
         std::vector<std::string> svect;
         ft::vector<std::string>  fvect;
-        std::cout << svect.size() << " = " << fvect.size() << std::endl;
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
-        std::cout << svect.max_size() << " = " << fvect.max_size() << std::endl;
+        ASSERT_EQUAL(svect, fvect);
 
         std::vector<int> svectint;
         ft::vector<int>  fvectint;
-        std::cout << svectint.size() << " = " << fvectint.size() << std::endl;
-        std::cout << svectint.capacity() << " = " << fvectint.capacity() << std::endl;
-        std::cout << svectint.max_size() << " = " << fvectint.max_size() << std::endl;
-
+        ASSERT_EQUAL(svect, fvect)
     }
 
     {
-        std::cout << "-------------" << std::endl;
         std::vector<std::string> svect(7, "hello");
         ft::vector<std::string>  fvect(7, "hello");
-        std::cout << svect.size() << " = " << fvect.size() << std::endl;
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
-        std::cout << svect.max_size() << " = " << fvect.max_size() << std::endl;
 
+        ASSERT_EQUAL(svect, fvect)
         {
             std::vector<std::string> svect2(svect);
             ft::vector<std::string>  fvect2(fvect);
-            std::cout << svect2.size() << " = " << fvect2.size() << std::endl;
-            std::cout << svect2.capacity() << " = " << fvect2.capacity() << std::endl;
-            std::cout << svect2.max_size() << " = " << fvect2.max_size() << std::endl;
             ASSERT_EQUAL(svect2, fvect2);
             svect2.clear();
             fvect2.clear();
-            std::cout << svect2.size() << " = " << fvect2.size() << std::endl;
-            std::cout << svect2.capacity() << " = " << fvect2.capacity() << std::endl;
-            std::cout << svect2.max_size() << " = " << fvect2.max_size() << std::endl;
             ASSERT_EQUAL(svect2, fvect2);
 
             std::vector<std::string> svect3(7, "hello");
             ft::vector<std::string>  fvect3(7, "hello");
             svect2 = svect3;
             fvect2 = fvect3;
-            std::cout << svect2.size() << " = " << fvect2.size() << std::endl;
-            std::cout << svect2.capacity() << " = " << fvect2.capacity() << std::endl;
-            std::cout << svect2.max_size() << " = " << fvect2.max_size() << std::endl;
             ASSERT_EQUAL(svect2, fvect2);
 
             svect2.reserve(100);
             fvect2.reserve(100);
-            std::cout << svect2.size() << " = " << fvect2.size() << std::endl;
-            std::cout << svect2.capacity() << " = " << fvect2.capacity() << std::endl;
-            std::cout << svect2.max_size() << " = " << fvect2.max_size() << std::endl;
             ASSERT_EQUAL(svect2, fvect2);
         }
 
@@ -78,7 +58,7 @@ void ft_vector_tests() {
         while (sit != svect.end() && fit != fvect.end()) {
             std::ptrdiff_t sdist = std::distance(sit, svect.begin());
             std::ptrdiff_t fdist = std::distance(fit, fvect.begin());
-            std::cout << sdist << "\t" << fdist << std::endl;
+            ASSERT_EQUAL(sdist, fdist);
             sit = 1 + sit;
             fit = 1 + fit;
             sit = sit - 1;
@@ -88,38 +68,7 @@ void ft_vector_tests() {
         }
     }
 
-//    {
-//        /*		this block is full of crap			*/
-//        std::cout << "-------------" << std::endl;
-//        std::vector<std::string>	svect(7, "hello");
-//        ft::vector<std::string>		fvect(7, "hello");
-//        std::vector<std::string>::reverse_iterator	sit = svect.rbegin();
-//        ft::vector<std::string>::reverse_iterator	fit = fvect.rbegin();
-//
-//        std::vector<std::string>::const_reverse_iterator	sit2 = sit;
-//        ft::vector<std::string>::const_reverse_iterator		fit2 = fit;
-//
-//        /*		this it the most painfull part		*/
-//        std::cout << sit2 - sit << fit2 - fit;
-//        if (sit <= sit2)
-//            std::cout << "allo";
-//        if (fit <= fit2)
-//            std::cout << "allo\n";
-//
-//        while (sit != svect.rend() && fit != fvect.rend())
-//        {
-//            std::ptrdiff_t	sdist = std::distance(sit, svect.rbegin());
-//            std::ptrdiff_t	fdist = std::distance(fit, fvect.rbegin());
-//            std::cout << sdist << "\t" << fdist << std::endl;
-//            ++sit;
-//            fit = 1 + fit;
-//        }
-//        /*		i hate this part really much		*/
-//    }
-
     {
-        std::cout << "-------------" << std::endl;
-        std::cout << "swapster" << std::endl;
         std::vector<int> sfoo(2, 100);   // two ints with a value of 100
         ft::vector<int>  ffoo(2, 100);   // two ints with a value of 100
         std::vector<int> sbar(4, 200);   // four ints with a value of 200
@@ -132,22 +81,14 @@ void ft_vector_tests() {
         ft::vector<int>::iterator  fit1 = ffoo.begin();
         std::vector<int>::iterator sit2 = sbar.begin();
         ft::vector<int>::iterator  fit2 = fbar.begin();
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
-        std::cout << sbar.capacity() << " = " << fbar.capacity() << std::endl;
-        std::cout << *sit1 << " " << *sit2 << std::endl;
-        std::cout << *fit1 << " " << *fit2 << std::endl;
+        ASSERT_EQUAL(*sit1, *fit1);
+        ASSERT_EQUAL(*sit2, *fit2);
 
         sfoo.swap(sbar);
         ffoo.swap(fbar);
 
         ASSERT_EQUAL(sfoo, ffoo);
         ASSERT_EQUAL(sbar, fbar);
-
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
-        std::cout << sbar.capacity() << " = " << fbar.capacity() << std::endl;
-
-        std::cout << *sit1 << " " << *sit2 << std::endl;
-        std::cout << *fit1 << " " << *fit2 << std::endl;
 
         try { sfoo.at(2378); }
         catch (const std::exception &e) { std::cerr << e.what() << std::endl; }
@@ -164,66 +105,25 @@ void ft_vector_tests() {
         std::cout << "assignster" << std::endl;
         sfoo.assign(200, 666);
         ffoo.assign(200, 666);
-        std::cout << sfoo.size() << " = " << ffoo.size() << std::endl;
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.assign(sbar.begin(), sbar.end());
         ffoo.assign(fbar.begin(), fbar.end());
-        std::cout << sfoo.size() << " = " << ffoo.size() << std::endl;
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sbar.assign(400, 666);
         fbar.assign(400, 666);
         sfoo.assign(sbar.begin(), sbar.end());
         ffoo.assign(fbar.begin(), fbar.end());
-        std::cout << sfoo.size() << " = " << ffoo.size() << std::endl;
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
     }
 
-    {
-        std::cout << "-------------" << std::endl;
-        std::vector<int>::size_type ssz;
-        std::vector<int>            sfoo;
-        ft::vector<int>::size_type  fsz;
-        ft::vector<int>             ffoo;
-        ssz = sfoo.capacity();
-        fsz = ffoo.capacity();
-        std::cout << "making foo grow:\n";
-
-        for (int i = 0; i < 100; ++i) {
-            sfoo.push_back(i);
-            ffoo.push_back(i);
-            if (ssz != sfoo.capacity() || fsz != ffoo.capacity()) {
-                ssz = sfoo.capacity();
-                fsz = ffoo.capacity();
-                std::cout << "capacity changed: " << ssz << "\t" << fsz << '\n';
-            }
-        }
-        ASSERT_EQUAL(sfoo, ffoo);
-
-        std::cout << "making foo smaller:\n";
-        for (int i = 0; i < 64; ++i) {
-            sfoo.pop_back();
-            ffoo.pop_back();
-            if (ssz != sfoo.capacity() || fsz != ffoo.capacity()) {
-                ssz = sfoo.capacity();
-                fsz = ffoo.capacity();
-                std::cout << "capacity changed: " << ssz << "\t" << fsz << '\n';
-            }
-        }
-        std::cout << "sizes changed: " << sfoo.size() << "\t" << ffoo.size() << '\n';
-        ASSERT_EQUAL(sfoo, ffoo);
-    }
 
     {
         std::cout << "-------------" << std::endl;
         std::vector<int> sfoo;
         ft::vector<int>  ffoo;
 
-        // set some initial content:
         for (int i = 1; i < 10; i++) {
             sfoo.push_back(i);
             ffoo.push_back(i);
@@ -231,42 +131,34 @@ void ft_vector_tests() {
 
         sfoo.resize(5);
         ffoo.resize(5);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.resize(8, 100);
         ffoo.resize(8, 100);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.resize(12);
         ffoo.resize(12);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.resize(0);
         ffoo.resize(0);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.resize(20, 6);
         ffoo.resize(20, 6);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.resize(666, 666);
         ffoo.resize(666, 666);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
 
         sfoo.resize(6, 6626);
         ffoo.resize(6, 6626);
-        std::cout << sfoo.capacity() << " = " << ffoo.capacity() << std::endl;
         ASSERT_EQUAL(sfoo, ffoo);
     }
 
     {
-        std::cout << "-------------" << std::endl;
         std::vector<int>           svect;
         ft::vector<int>            fvect;
         std::vector<int>::iterator sit;
@@ -277,7 +169,6 @@ void ft_vector_tests() {
             svect.push_back(i);
             fvect.push_back(i);
         }
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         // erase the 6th element
@@ -303,7 +194,6 @@ void ft_vector_tests() {
     }
 
     {
-        std::cout << "--------------" << std::endl;
         std::vector<std::string> svect0;
         ft::vector<std::string>  fvect0;
         std::vector<std::string> svect1;
@@ -364,35 +254,32 @@ void reserve_test() {
         ft::vector<std::string>  fvect(2, "hi");
         std::vector<std::string> svect(2, "hi");
 
-//        fvect.reserve(100);
-//        svect.reserve(100);
-
         ASSERT_EQUAL(fvect, svect);
         ASSERT_EQUAL(fvect.capacity(), svect.capacity());
 
-//        fvect.reserve(10);
-//        svect.reserve(10);
+        fvect.reserve(10);
+        svect.reserve(10);
 
         ASSERT_EQUAL(fvect, svect);
         ASSERT_EQUAL(fvect.capacity(), svect.capacity());
     }
 
-//    {
-//        ft::vector<std::string> fvect(10, "HI");
-//        std::vector<std::string> svect(10, "HI");
-//
-//        fvect.reserve(100);
-//        svect.reserve(100);
-//
-//        ASSERT_EQUAL(fvect, svect);
-//        ASSERT_EQUAL(fvect.capacity(), svect.capacity());
-//
-//        fvect.reserve(10);
-//        svect.reserve(10);
-//
-//        ASSERT_EQUAL(fvect, svect);
-//        ASSERT_EQUAL(fvect.capacity(), svect.capacity());
-//    }
+    {
+        ft::vector<std::string> fvect(10, "HI");
+        std::vector<std::string> svect(10, "HI");
+
+        fvect.reserve(100);
+        svect.reserve(100);
+
+        ASSERT_EQUAL(fvect, svect);
+        ASSERT_EQUAL(fvect.capacity(), svect.capacity());
+
+        fvect.reserve(10);
+        svect.reserve(10);
+
+        ASSERT_EQUAL(fvect, svect);
+        ASSERT_EQUAL(fvect.capacity(), svect.capacity());
+    }
 }
 
 void push_back_test() {
