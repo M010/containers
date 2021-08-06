@@ -6,25 +6,25 @@
 
 namespace ft {
 template<class T>
-class rbIterator {
+class mapIterator {
  public:
     typedef std::bidirectional_iterator_tag               iterator_category;
     typedef T                                             value_type;
     typedef std::ptrdiff_t                                difference_type;
     typedef value_type                                    *pointer;
     typedef value_type                                    &reference;
-    typedef rbIterator<T>                                 self_type;
+    typedef mapIterator<T>                                 self_type;
     typedef Node<typename remove_const<value_type>::type> node_type;
-    rbIterator(node_type *node = NULL) : _node(node) {};
+    mapIterator(node_type *node = NULL) : _node(node) {};
  private:
     node_type *_node;
  public:
     template<class Some>
-    rbIterator(const rbIterator<Some> &it, typename enable_if<!is_const<Some>::value>::type* = 0) {
+    mapIterator(const mapIterator<Some> &it, typename enable_if<!is_const<Some>::value>::type* = 0) {
         _node = it.GetNode();
     }
 
-    rbIterator(const self_type &it) {
+    mapIterator(const self_type &it) {
         _node = it.GetNode();
     }
 
@@ -32,11 +32,11 @@ class rbIterator {
         return _node;
     }
 
-    bool operator==(const rbIterator &rhs) const {
+    bool operator==(const mapIterator &rhs) const {
         return _node == rhs._node;
     }
 
-    bool operator!=(const rbIterator &rhs) const {
+    bool operator!=(const mapIterator &rhs) const {
         return !(rhs == *this);
     }
 

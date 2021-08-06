@@ -10,7 +10,7 @@ add_executable(containers main.cpp
         utils.h
         map.hpp
         pair.h
-        rbIterator.h
+        mapIterator.h
         Node.h
         reverse_iterator.h
         tests/vector_tests.h
@@ -19,7 +19,7 @@ add_executable(containers main.cpp
         tests/stack_test.h
         tests/map_tests.cpp
         tests/map_tests.h
-        tests/vector_tests.cpp vector_time_test.cpp)
+        tests/vector_tests.cpp)
 
 add_executable(time_map time_map_main.cpp)
 add_executable(time_vector time_map_main.cpp)

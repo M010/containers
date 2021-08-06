@@ -2,7 +2,7 @@
 
 #include "pair.h"
 #include "Node.h"
-#include "rbIterator.h"
+#include "mapIterator.h"
 #include "reverse_iterator.h"
 #include "utils.h"
 #include <functional>
@@ -31,8 +31,8 @@ class map {
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
-    typedef rbIterator<value_type>                   iterator;
-    typedef rbIterator<const value_type>             const_iterator;
+    typedef mapIterator<value_type>                   iterator;
+    typedef mapIterator<const value_type>             const_iterator;
     typedef ft::reverse_iterator<iterator>           reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
     typedef ptrdiff_t                                difference_type;
@@ -133,8 +133,6 @@ class map {
             _root = q;
         p->update_size();
         q->update_size();
-        //        q->size = p->size;
-        //        fixsize(p);
     }
 
     void rotate_left(node_type *p) {

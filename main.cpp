@@ -1,14 +1,7 @@
-#include "pair.h"
-#include "map.hpp"
-#include "vector.hpp"
 #include "tests/test_runner.h"
 #include "tests/vector_tests.h"
 #include "tests/stack_test.h"
 #include "tests/map_tests.h"
-#include <iostream>
-#include <map>
-#include <vector>
-#include <list>
 
 
 void test_all() {
