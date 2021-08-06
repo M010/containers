@@ -37,11 +37,10 @@ class map {
     typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
     typedef ptrdiff_t                                difference_type;
     typedef size_t                                   size_type;
-    typedef Node<value_type>                         node_type;
-
+    typedef Node<value_type>              node_type;
  private:
-    key_compare _key_cmp;
 
+    key_compare     _key_cmp;
     struct ValComp {
         ValComp(key_compare key_cmp) : _key_cmp(key_cmp) {}
         bool operator()(const value_type &lhs, const value_type &rhs) const {
@@ -50,25 +49,44 @@ class map {
      private:
         key_compare _key_cmp;
     };
-
     typedef ValComp value_compare;
     value_compare   _v_cmp_less;
 
-//		bool _v_cmp_less(const value_type &lhs, const value_type &rhs) const
-//		{
-//			return _key_cmp(lhs.first, rhs.first);
-//		}
+    allocator_type                                                _alloc;
+    size_type                                                     _size;
+    node_type                                                     *_root;
+    node_type                                                     *_Leaf;
+    node_type                                                     *_most_left;
+    node_type                                                     *_most_right;
+    typedef typename Allocator::template rebind<node_type>::other node_allocator;
+    node_allocator                                                _node_alloc;
+
+    node_type *_alloc_node() {
+        node_type *allocated = _node_alloc.allocate(1);
+        _node_alloc.construct(allocated, node_type());
+        return allocated;
+    }
+
+    node_type *_alloc_node(const value_type &val, node_type *leaf, node_type *parent = NULL) {
+        node_type *allocated = _node_alloc.allocate(1);
+        value_type* p_val = _alloc.allocate(1);
+        _alloc.construct(p_val, value_type(val));
+        _node_alloc.construct(allocated, node_type(p_val, leaf, parent));
+        return allocated;
+    }
+
+    void _dealloc_node(node_type* node){
+        if(node->data) {
+            _alloc.destroy(node->data);
+            _alloc.deallocate(node->data, 1);
+        }
+        _node_alloc.destroy(node);
+        _node_alloc.deallocate(node, 1);
+    }
 
     bool _v_cmp(const value_type &lhs, const value_type &rhs) const {
         return !(_v_cmp_less(lhs, rhs) || _v_cmp_less(rhs, lhs));
     }
-
-    allocator_type _alloc;
-    size_type      _size;
-    node_type      *_root;
-    node_type      *_Leaf;
-    node_type      *_most_left;
-    node_type      *_most_right;
 
     void _update_Leaf() {
         _most_left  = GetMin(_root);
@@ -100,7 +118,7 @@ class map {
     ft::pair<node_type *, bool> _put(const value_type &val, node_type *&curr, node_type *parent = NULL) {
         //TODO: parrent is Tnull?
         if (curr == NULL || curr->isNull()) {
-            curr = new node_type(val, _Leaf, parent);
+            curr = _alloc_node(val, _Leaf, parent);
             _size++;
             return ft::make_pair(curr, true);
         }
@@ -194,7 +212,7 @@ class map {
     }
 
     size_t _delete_elem(node_type *node) {
-        delete _exclude_node(node);
+        _dealloc_node(_exclude_node(node));
         _update_Leaf();
         _size--;
         return 1;
@@ -226,8 +244,7 @@ class map {
 
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type())
-        : _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(NULL) {
-        _root = _Leaf = new node_type();
+        : _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(_alloc_node()), _Leaf(_root) {
         _update_Leaf();
     }
 
@@ -236,15 +253,13 @@ class map {
         const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type(),
         typename enable_if<!is_integral<InputIterator>::value>::type * = 0) :
-        _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(NULL) {
-        _root = _Leaf = new node_type();
+        _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(_alloc_node()), _Leaf(_root) {
         _update_Leaf();
         this->insert(first, last);
     }
 
     map(const map &other) :
-        _key_cmp(other._key_cmp), _v_cmp_less(_key_cmp), _alloc(other._alloc), _size(0), _root(NULL) {
-        _root = _Leaf = new node_type();
+        _key_cmp(other._key_cmp), _v_cmp_less(_key_cmp), _alloc(other._alloc), _size(0), _root(_alloc_node()), _Leaf(_root) {
         _update_Leaf();
         *this = other;
     }
@@ -320,7 +335,7 @@ class map {
     }
 
     size_type max_size() const {
-        return 461168601842738790; //TODO::!!
+        return _alloc.max_size();
     }
 
     /*

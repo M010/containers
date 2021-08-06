@@ -11,23 +11,31 @@ enum tree_branch {
 template<class V>
 struct Node {
     typedef ft::Node<V> self_type;
-    typedef V           value_type;
+    typedef V                      value_type;
 
-    explicit Node(const value_type &value, self_type *Tnull, self_type *parent = NULL)
-        : left(Tnull), right(Tnull), parent(parent ? parent : Tnull), data(new value_type(value)) {}
-
-    Node(const Node &node) : data(NULL) {
-        this = node;
+    explicit Node(value_type *value, self_type *Tnull, self_type *parent = NULL)
+        : left(Tnull), right(Tnull), parent(parent ? parent : Tnull), data(NULL){
+        data = value; 
     }
 
-    Node &operator=(const Node &node) {
-        delete data;
-        data = new Node(node.data);
+    Node(const Node &node)
+    : data(NULL) {
+        data = NULL;
+        *this = node;
     }
-
-    ~Node() {
-        delete data;
+//
+    Node &operator=(const Node &node)
+    {
+        data = node.data;
+        left = node.left;
+        right = node.right;
+        parent = node.parent;
+        return *this;
     }
+////    ~Node() {
+////        alloc_.destruct(data);
+////        alloc_.deallocate(data);
+////    }
 
     self_type *GetNode(tree_branch branch) {
         return branch == LEFT_BRANCH ? this->left : this->right;
@@ -46,12 +54,6 @@ struct Node {
     value_type &ref_val() {
         return *data;
     }
-    void val(const value_type &val) const {
-        if (data)
-            *data = val;
-        else
-            data = new value_type(val);
-    }
 
     Node() : left(NULL), right(NULL), parent(NULL), data(NULL) {}
     Node *&ParentBranch() {
@@ -59,9 +61,9 @@ struct Node {
         return (parent->left == this) ? parent->left : parent->right;
     }
 
- private:
     value_type *data;
 };
+
 
 template<class T>
 Node<T> *GetMinMaxAlgo(Node<T> *node, bool min) {
@@ -70,6 +72,7 @@ Node<T> *GetMinMaxAlgo(Node<T> *node, bool min) {
         node = node->GetNode(branch);
     return node;
 }
+
 
 template<class T>
 Node<T> *GetMin(Node<T> *node) {

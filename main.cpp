@@ -524,6 +524,8 @@ void test_all() {
    // all_map_tests(tr);
 }
 
+
+
 struct Cry {
     std::string name;
 
@@ -546,6 +548,5 @@ struct Cry {
 int main() {
     std::srand(time(0));
     test_all();
-
     return (0);
 }

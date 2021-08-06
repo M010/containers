@@ -27,6 +27,8 @@ struct pair {
     pair(const pair<T, U> &other) : first(other.first), second(other.second) {
     }
 
+    pair(const pair& p): first(p.first), second(p.second){};
+
     bool operator==(const pair &rhs) const;
     bool operator!=(const pair &rhs) const;
     bool operator<(const pair &rhs) const;
