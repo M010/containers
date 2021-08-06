@@ -610,6 +610,7 @@ void insert_test() {
 }
 
 void all_vector_tests(TestRunner &tr) {
+    std::cerr << "============ vector ================" << std::endl;
     RUN_TEST(tr, iterator_test);
     RUN_TEST(tr, reverse_iterator_test);
     RUN_TEST(tr, reserve_test);
@@ -617,4 +618,5 @@ void all_vector_tests(TestRunner &tr) {
     RUN_TEST(tr, push_back_test);
     RUN_TEST(tr, insert_test);
     RUN_TEST(tr, ft_vector_tests);
+    std::cerr << "========== vector end ==============" << std::endl;
 }

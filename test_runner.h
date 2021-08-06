@@ -32,21 +32,21 @@ std::string to_string(const T &val) {
 }
 
 template<class T>
-bool operator==(const std::vector<T> lhs, const ft::vector<T> rhs) {
+bool operator==(const std::vector<T>& lhs, const ft::vector<T>& rhs) {
     if (lhs.size() != rhs.size())
         return false;
     return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 template<class T>
-bool operator==(const ft::vector<T> lhs, const std::vector<T> rhs) {
+bool operator==(const ft::vector<T>& lhs, const std::vector<T>& rhs) {
     if (lhs.size() != rhs.size())
         return false;
     return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
 template<class K, class V, class Cmp>
-bool operator==(const ft::map<K, V, Cmp> lhs, const std::map<K, V, Cmp> rhs) {
+bool operator==(const ft::map<K, V, Cmp>& lhs, const std::map<K, V, Cmp>& rhs) {
     if (lhs.size() != rhs.size())
         return false;
     typename std::map<K, V, Cmp>::const_iterator     sit = rhs.begin();
@@ -66,12 +66,12 @@ bool operator==(const ft::map<K, V, Cmp> lhs, const std::map<K, V, Cmp> rhs) {
 }
 
 template<class K, class V, class Cmp>
-bool operator==(const std::map<K, V, Cmp> lhs, const ft::map<K, V, Cmp> rhs) {
+bool operator==(const std::map<K, V, Cmp>& lhs, const ft::map<K, V, Cmp>& rhs) {
     return rhs == lhs;
 }
 
 template<class K, class V>
-bool operator==(const ft::map<K, V> lhs, const std::map<K, V> rhs) {
+bool operator==(const ft::map<K, V>& lhs, const std::map<K, V>& rhs) {
     if (lhs.size() != rhs.size())
         return false;
     typename std::map<K, V>::const_iterator     sit = rhs.begin();
@@ -90,7 +90,7 @@ bool operator==(const ft::map<K, V> lhs, const std::map<K, V> rhs) {
 }
 
 template<class K, class V>
-bool operator==(const std::map<K, V> lhs, const ft::map<K, V> rhs) {
+bool operator==(const std::map<K, V>& lhs, const ft::map<K, V>& rhs) {
     return rhs == lhs;
 }
 

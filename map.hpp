@@ -121,7 +121,7 @@ class map {
         }
 
         ft::pair<node_type *, bool> ret = ft::make_pair(curr, false);
-        if(rand() % (curr->size + 1) == 0)
+        if (rand() % (curr->size + 1) == 0)
             ret = insert_root(val, curr, curr->parent); //TODO: test this!!!
         else if (_v_cmp_less(curr->val(), val))
             ret = _put(val, curr->right, curr);
@@ -180,21 +180,19 @@ class map {
         q->update_size();
     }
 
-    node_type* join(node_type* p, node_type* q) // объединение двух деревьев
+    node_type *join(node_type *left, node_type *right) // объединение двух деревьев
     {
-        if( !p ) return q;
-        if( !q ) return p;
-        if( rand()%(p->size+q->size) < p->size )
-        {
-            p->right = join(p->right,q);
-            fixsize(p);
-            return p;
-        }
-        else
-        {
-            q->left = join(p,q->left);
-            fixsize(q);
-            return q;
+        if (!left || left->isNull()) return right;
+        if (!right || right->isNull()) return left;
+
+        if (right->size > left->size) {
+            left->assign_node(RIGHT_BRANCH, join(left->right, right));
+            left->update_size();
+            return left;
+        } else {
+            right->assign_node(LEFT_BRANCH, join(left, right->left));
+            right->update_size();
+            return right;
         }
     }
 
@@ -211,7 +209,6 @@ class map {
             ret = insert_root(val, curr->left, curr);
             rotate_right(curr);
         }
-
         return ret;
     }
 
@@ -267,6 +264,34 @@ class map {
             return ft::make_pair(node, increment(node));
         return ft::make_pair(node, node);
     };
+
+    size_t _delete_random_node(const value_type &val, node_type *&curr) {
+        if (curr == NULL || curr->isNull()) {
+            return 0;
+        }
+
+        size_t ret = 0;
+        node_type *copy_curr = curr;
+        node_type *parent_curr = curr->parent;
+
+        if (_v_cmp(curr->val(), val)){
+            curr = join(curr->left, curr->right);
+            if(!curr || curr->notNull()){
+                curr->parent = parent_curr;
+                curr->update_size();
+            }
+            _dealloc_node(copy_curr);
+            return 1;
+        }
+
+        if (_v_cmp_less(curr->val(), val)){
+            ret = _delete_random_node(val, curr->right);
+        }
+        else if (_v_cmp_less(val, curr->val()))
+            ret = _delete_random_node(val, curr->left);
+        curr->update_size();
+        return ret;
+    }
 
     node_type *_exclude_node(node_type *node) {
         //TODO: check if node Is Tnull or null?
@@ -374,7 +399,7 @@ class map {
 
     ~map() {
         this->clear();
-        delete _Leaf;
+        _dealloc_node(_Leaf);
     }
 
     /*
@@ -461,11 +486,7 @@ class map {
     }
 
     iterator insert(iterator hint, const value_type &value) {
-        //TODO:: void hint
         (void) hint;
-        //node_type *hint_node = hint.GetNode();
-//			if (_v_cmp_less(*hint, value) && _v_cmp_less(value, *ft::next(hint))) //TODO:hard_test
-//				return iterator(_put(value, hint_node).first);
         return iterator(insert(value).first);
     }
 
@@ -476,16 +497,20 @@ class map {
     }
 
     void erase(iterator position) {
-        _delete_elem(position.GetNode()); // TODO: optimize
+        _delete_random_node(*position, _root);
+        _update_Leaf();
     }
 
     size_type erase(const key_type &k) {
-        return _delete_elem(make_val(k));
+        size_type ret = _delete_random_node(make_val(k), _root);
+        _update_Leaf();
+        return ret;
     }
 
     void erase(iterator first, iterator last) {
-        while (first != last)
+        while (first != last) {
             erase(first++);
+        }
     }
 
     key_compare key_comp() const {
