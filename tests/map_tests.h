@@ -1,11 +1,11 @@
 #pragma once
 
-#include  "map.hpp"
+#include  "../map.hpp"
 #include <map>
 #include <string>
 #include "map_tests.h"
 #include "test_runner.h"
-#include "utils.h"
+#include "../utils.h"
 
 struct Point {
     Point(double x, double y) : x(x), y(y) {}

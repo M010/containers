@@ -174,14 +174,9 @@ void map_simple_bounds_test() {
         ASSERT_EQUAL(*fitlow, *itlow);
         ASSERT_EQUAL(*fitup, *itup);
 
-        std::cout << "=======================" << std::endl;
-        fmymap.print_map();
         mymap.erase(itlow, itup);        // erases [itlow,itup)
         fmymap.erase(fitlow, fitup);        // erases [itlow,itup)
 
-        std::cout << "=======================" << std::endl;
-        fmymap.print_map();
-        std::cout << "=======================" << std::endl;
         ASSERT_EQUAL(mymap, fmymap);
     }
 
@@ -206,7 +201,6 @@ void map_simple_bounds_test() {
         fmymap['c'] = 60;
         ASSERT_EQUAL(fmymap, mymap)
 
-        fmymap.print_map();
         fitlow = fmymap.lower_bound('a');  // itlow points to b
         fitup  = fmymap.upper_bound('a');   // itup points to e (not d!)
         ASSERT_EQUAL(*fitlow, *itlow);
@@ -263,7 +257,6 @@ void map_iterator_test() {
         map1["something"]  = 69;
         map1["anything"]   = 199;
         map1["that thing"] = 50;
-        std::cout << "map1 = " << map1 << endl;
 
         ft::map<std::string, int> fmap1;
         fmap1["something"]  = 69;
@@ -278,7 +271,6 @@ void map_iterator_test() {
 
         fit = fmap1.end();
         it  = map1.end();
-        fmap1.print_map();
         while (fit != fmap1.begin()) {
             ASSERT_EQUAL(*(--fit), *(--it))
         }
@@ -288,7 +280,6 @@ void map_iterator_test() {
         map1["something"]  = 69;
         map1["anything"]   = 199;
         map1["that thing"] = 50;
-        std::cout << "map1 = " << map1 << endl;
 
         ft::map<std::string, int> fmap1;
         fmap1["something"]  = 69;
@@ -321,20 +312,16 @@ void map_constructor_tests() {
         map1["something"]  = 69;
         map1["anything"]   = 199;
         map1["that thing"] = 50;
-        std::cout << "map1 = " << map1 << endl;
 
         ft::map<std::string, int> fmap1;
         fmap1["something"]  = 69;
         fmap1["anything"]   = 199;
         fmap1["that thing"] = 50;
         ASSERT_EQUAL(fmap1, map1);
-        std::cout << "map1 = " << fmap1 << std::endl;
 
-        // (2) Range constructor
         std::map<std::string, int> iter(map1.find("anything"), map1.end());
         ft::map<std::string, int>  fiter(fmap1.find("anything"), fmap1.end());
 
-        // (2) Range constructor
         std::map<std::string, int> niter(map1.find("something"), map1.end());
         ft::map<std::string, int>  nfiter(fmap1.find("something"), fmap1.end());
 

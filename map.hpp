@@ -93,23 +93,6 @@ class map {
         _Leaf->parent = _most_right;
     }
 
-    void _print(node_type *p, int indent) {
-        if (p != NULL && p->notNull()) {
-            if (p->right->notNull()) {
-                _print(p->right, indent + 4);
-            }
-            if (indent) {
-                std::cout << std::setw(indent) << ' ';
-            }
-            if (p->right->notNull()) std::cout << " /\n" << std::setw(indent) << ' ';
-            std::cout << p->val() << p->size << "\n ";
-            if (p->left->notNull()) {
-                std::cout << std::setw(indent) << ' ' << " \\\n";
-                _print(p->left, indent + 4);
-            }
-        }
-    }
-
     static value_type make_val(const key_type &k) {
         return value_type(k, mapped_type());
     }
@@ -122,7 +105,7 @@ class map {
 
         ft::pair<node_type *, bool> ret = ft::make_pair(curr, false);
         if (rand() % (curr->size + 1) == 0)
-            ret = insert_root(val, curr, curr->parent); //TODO: test this!!!
+            ret = insert_root(val, curr, curr->parent);
         else if (_v_cmp_less(curr->val(), val))
             ret = _put(val, curr->right, curr);
         else if (_v_cmp_less(val, curr->val()))
@@ -132,7 +115,6 @@ class map {
     }
 
     void rotate_right(node_type *p) {
-        //TODO: if p NULL or isNUll?
         node_type *q      = p->left;
         bool      is_root = p == _root;
 
@@ -156,7 +138,6 @@ class map {
     }
 
     void rotate_left(node_type *p) {
-        //TODO: if p NULL or isNUll?
         node_type *q      = p->right;
         bool      is_root = p == _root;
 
@@ -211,22 +192,6 @@ class map {
         }
         return ret;
     }
-
- public:
-
-    void insert_root_test(const value_type &val) {
-        insert_root(val, _root);
-    }
-
-    void rotate_left_root() {
-        rotate_left(_root);
-    }
-
-    void rotate_right_root() {
-        rotate_right(_root);
-    }
-
-    //TODO: delete it
 
     node_type *_find_node(const value_type &val, node_type *start = NULL) const {
 
@@ -292,70 +257,6 @@ class map {
         curr->update_size();
         return ret;
     }
-
-    node_type *_exclude_node(node_type *node) {
-        //TODO: check if node Is Tnull or null?
-        if (node->left->isNull()) {
-            if (node->parent->notNull()) {
-                node->ParentBranch() = node->right;
-            } else
-                _root = node->right;
-            if (node->right->notNull())
-                node->right->parent = node->parent;
-            node->right             = node->parent = node->left = _Leaf;
-            return node;
-        }
-
-        if (node->right->isNull()) {
-            if (node->parent->notNull())
-                node->ParentBranch() = node->left;
-            else
-                _root = node->left;
-            if (node->left->notNull())
-                node->left->parent = node->parent;
-            node->right            = node->parent = node->left = _Leaf;
-            return node;
-        }
-
-        node_type *excluded = _exclude_node(GetMin(node->right));
-        copy_links(node, excluded);
-        if (node == _root)
-            _root = excluded;
-        node->right = node->parent = node->left = _Leaf;
-        return node;
-    };
-
-    size_t _delete_elem(const value_type &val) {
-        node_type *found_elem = _find_node(val);
-        if (!found_elem || found_elem->isNull())
-            return 0;
-        _delete_elem(found_elem);
-        return 1;
-    }
-
-    size_t _delete_elem(node_type *node) {
-        _dealloc_node(_exclude_node(node));
-        _update_Leaf();
-        return 1;
-    }
-
-    void print_map() {
-        _print(_root, 0);
-    }
-
-    void _raw_print(node_type *node) {
-        if (node->notNull()) {
-            _raw_print(node->left);
-            std::cout << node->val() << " ";
-            _raw_print(node->right);
-        }
-    }
-
-    void raw_print() {
-        _raw_print(_root);
-    }
-
-//TODO: delete it
 
  public:
     /*

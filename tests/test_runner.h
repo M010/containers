@@ -1,9 +1,9 @@
 #pragma once
 
-#include "utils.h"
-#include "map.hpp"
-#include "vector.hpp"
-#include "utils.h"
+#include "../utils.h"
+#include "../map.hpp"
+#include "../vector.hpp"
+#include "../utils.h"
 #include <sstream>
 #include <stdexcept>
 #include <cstdlib>

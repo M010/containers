@@ -1,4 +1,4 @@
-#include "vector.hpp"
+#include "../vector.hpp"
 #include "test_runner.h"
 
 void ft_vector_tests() {
@@ -38,7 +38,6 @@ void ft_vector_tests() {
 
         ASSERT_EQUAL(svect, fvect);
 
-        std::cout << "front and back change" << std::endl;
         svect.front() = "front";
         svect.back()  = "back";
         fvect.front() = "front";
@@ -101,8 +100,6 @@ void ft_vector_tests() {
         ASSERT_EQUAL(sfoo, ffoo);
         ASSERT_EQUAL(sbar, fbar);
 
-        std::cout << "-------------" << std::endl;
-        std::cout << "assignster" << std::endl;
         sfoo.assign(200, 666);
         ffoo.assign(200, 666);
         ASSERT_EQUAL(sfoo, ffoo);
@@ -120,7 +117,6 @@ void ft_vector_tests() {
 
 
     {
-        std::cout << "-------------" << std::endl;
         std::vector<int> sfoo;
         ft::vector<int>  ffoo;
 
@@ -184,12 +180,10 @@ void ft_vector_tests() {
 
         svect.erase(svect.end() - 4, svect.end() - 1);
         fvect.erase(fvect.end() - 4, fvect.end() - 1);
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
 
         svect.erase(svect.begin(), svect.end());
         fvect.erase(fvect.begin(), fvect.end());
-        std::cout << svect.capacity() << " = " << fvect.capacity() << std::endl;
         ASSERT_EQUAL(svect, fvect);
     }
 
@@ -215,13 +209,11 @@ void ft_vector_tests() {
         fvect1.push_back("vector5");
         ASSERT_EQUAL(svect1, fvect1);
 
-        std::cout << "member swap:" << std::endl;
         svect0.swap(svect1);
         fvect0.swap(fvect1);
         ASSERT_EQUAL(svect0, fvect0);
         ASSERT_EQUAL(svect1, fvect1);
 
-        std::cout << "nonmember swap:" << std::endl;
         swap(svect0, svect1);
         swap(fvect0, fvect1);
         ASSERT_EQUAL(svect0, fvect0);
@@ -229,7 +221,6 @@ void ft_vector_tests() {
     }
 
     {
-        std::cout << "-------------" << std::endl << "vector of vectors" << std::endl;
         std::vector<std::vector<size_t> > svect;
         ft::vector<ft::vector<size_t> >   fvect;
 
