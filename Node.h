@@ -44,10 +44,6 @@ struct Node {
         parent = node.parent;
         return *this;
     }
-////    ~Node() {
-////        alloc_.destruct(data);
-////        alloc_.deallocate(data);
-////    }
 
     self_type *GetNode(tree_branch branch) const {
         return branch == LEFT_BRANCH ? this->left : this->right;
