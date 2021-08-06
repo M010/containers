@@ -115,7 +115,7 @@ class vector {
 
     template<class InputIterator>
     void assign(InputIterator first, InputIterator last,
-                typename enable_if<!is_integral<InputIterator>::value>::type* = 0) {
+                typename enable_if<!is_integral<InputIterator>::value>::type * = 0) {
         *this = vector<T, Allocator>(first, last);
     }
 

@@ -31,8 +31,8 @@ class map {
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer         pointer;
     typedef typename allocator_type::const_pointer   const_pointer;
-    typedef mapIterator<value_type>                   iterator;
-    typedef mapIterator<const value_type>             const_iterator;
+    typedef mapIterator<value_type>                  iterator;
+    typedef mapIterator<const value_type>            const_iterator;
     typedef ft::reverse_iterator<iterator>           reverse_iterator;
     typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
     typedef ptrdiff_t                                difference_type;
@@ -233,13 +233,13 @@ class map {
             return 0;
         }
 
-        size_t ret = 0;
-        node_type *copy_curr = curr;
+        size_t    ret          = 0;
+        node_type *copy_curr   = curr;
         node_type *parent_curr = curr->parent;
 
-        if (_v_cmp(curr->val(), val)){
+        if (_v_cmp(curr->val(), val)) {
             curr = join(curr->left, curr->right);
-            if(!curr || curr->notNull()){
+            if (!curr || curr->notNull()) {
                 curr->parent = parent_curr;
                 curr->update_size();
             }
@@ -247,10 +247,9 @@ class map {
             return 1;
         }
 
-        if (_v_cmp_less(curr->val(), val)){
+        if (_v_cmp_less(curr->val(), val)) {
             ret = _delete_random_node(val, curr->right);
-        }
-        else if (_v_cmp_less(val, curr->val()))
+        } else if (_v_cmp_less(val, curr->val()))
             ret = _delete_random_node(val, curr->left);
         curr->update_size();
         return ret;

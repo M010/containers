@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project(containers)
 
 set(CMAKE_CXX_STANDARD 98)
-set(CMAKE_CXX_FLAGS  "-Wall -Wextra -Werror ")
+set(CMAKE_CXX_FLAGS  "-Wall -Wextra -Werror -O2")
 
 add_executable(containers main.cpp
         vector.hpp
@@ -22,4 +22,4 @@ add_executable(containers main.cpp
         tests/vector_tests.cpp)
 
 add_executable(time_map time_map_main.cpp)
-add_executable(time_vector time_map_main.cpp)
+add_executable(time_vector vector_time_test.cpp)

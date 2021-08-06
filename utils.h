@@ -165,14 +165,14 @@ ptrdiff_t distance(const Iterator &first, const Iterator &last) {
     return distance_helper(first, last, typename iterator_traits<Iterator>::iterator_category());
 }
 
-template <class T>
+template<class T>
 struct is_const {
-       static const bool value = false;
-    };
+    static const bool value = false;
+};
 
-template <class T>
-    struct is_const<const T>{
-        static const bool value = true;
-    };
+template<class T>
+struct is_const<const T> {
+    static const bool value = true;
+};
 
 }

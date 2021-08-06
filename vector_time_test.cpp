@@ -5,10 +5,10 @@
 #include "vector.hpp"
 #include <vector>
 
-#define NAMESP std
+#define NAMESP ft
 
 static void time() {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10000; i++) {
         NAMESP::vector<int> sample;
         for (int            j = 0; j < 1000; j++)
             sample.push_back(j);
@@ -18,7 +18,7 @@ static void time() {
             sample.pop_back();
         sample.assign(isample.begin(), isample.end());
         for (int j = 0; j < 1000; j++) {
-            sample.erase(isample.begin(), isample.end());
+            sample.erase(sample.begin(), sample.end());
         }
 
         for (int j = 0; j < 1000; j++) {
@@ -26,7 +26,7 @@ static void time() {
             isample.reserve(43);
         }
 
-        NAMESP::vector<int> ksample(1000);
+        NAMESP::vector<int> ksample(1000, 42);
         for (int j = 0; j < 10; j++) {
             isample.insert(isample.begin(), ksample.begin(), ksample.end());
         }
