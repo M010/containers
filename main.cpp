@@ -19,10 +19,7 @@ void test_all() {
 }
 
 int main() {
-    std::srand(1);
+    std::srand(time(0));
     test_all();
-
-
-    ft::map<int, int> k;
     return (0);
 }
