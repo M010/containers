@@ -37,7 +37,7 @@ class map {
     typedef ft::reverse_iterator<const_iterator>     const_reverse_iterator;
     typedef ptrdiff_t                                difference_type;
     typedef size_t                                   size_type;
-    typedef Node<value_type>              node_type;
+    typedef Node<value_type>                         node_type;
  private:
 
     key_compare     _key_cmp;
@@ -53,7 +53,6 @@ class map {
     value_compare   _v_cmp_less;
 
     allocator_type                                                _alloc;
-    size_type                                                     _size;
     node_type                                                     *_root;
     node_type                                                     *_Leaf;
     node_type                                                     *_most_left;
@@ -68,15 +67,15 @@ class map {
     }
 
     node_type *_alloc_node(const value_type &val, node_type *leaf, node_type *parent = NULL) {
-        node_type *allocated = _node_alloc.allocate(1);
-        value_type* p_val = _alloc.allocate(1);
+        node_type  *allocated = _node_alloc.allocate(1);
+        value_type *p_val     = _alloc.allocate(1);
         _alloc.construct(p_val, value_type(val));
         _node_alloc.construct(allocated, node_type(p_val, leaf, parent));
         return allocated;
     }
 
-    void _dealloc_node(node_type* node){
-        if(node->data) {
+    void _dealloc_node(node_type *node) {
+        if (node->data) {
             _alloc.destroy(node->data);
             _alloc.deallocate(node->data, 1);
         }
@@ -103,7 +102,7 @@ class map {
                 std::cout << std::setw(indent) << ' ';
             }
             if (p->right->notNull()) std::cout << " /\n" << std::setw(indent) << ' ';
-            std::cout << p->val() << "\n ";
+            std::cout << p->val() << p->size << "\n ";
             if (p->left->notNull()) {
                 std::cout << std::setw(indent) << ' ' << " \\\n";
                 _print(p->left, indent + 4);
@@ -116,21 +115,101 @@ class map {
     }
 
     ft::pair<node_type *, bool> _put(const value_type &val, node_type *&curr, node_type *parent = NULL) {
-        //TODO: parrent is Tnull?
         if (curr == NULL || curr->isNull()) {
             curr = _alloc_node(val, _Leaf, parent);
-            _size++;
             return ft::make_pair(curr, true);
         }
 
-        if (_v_cmp_less(curr->val(), val))
-            return _put(val, curr->right, curr);
+        ft::pair<node_type *, bool> ret = ft::make_pair(curr, false);
+        if(rand() % (curr->size + 1) == 0)
+            ret = insert_root(val, curr, curr->parent); //TODO: test this!!!
+        else if (_v_cmp_less(curr->val(), val))
+            ret = _put(val, curr->right, curr);
         else if (_v_cmp_less(val, curr->val()))
-            return _put(val, curr->left, curr);
-        return ft::make_pair(curr, false);
+            ret = _put(val, curr->left, curr);
+        curr->update_size();
+        return ret;
+    }
+
+    void rotate_right(node_type *p) {
+        //TODO: if p NULL or isNUll?
+        node_type *q      = p->left;
+        bool      is_root = p == _root;
+
+        if (!q || q->isNull()) {
+            return;
+        }
+
+        if (p->parent && p->parent->notNull()) {
+            p->ParentBranch() = q;
+        }
+        q->parent = p->parent;
+        p->assign_node(LEFT_BRANCH, q->right);
+        q->assign_node(RIGHT_BRANCH, p);
+
+        if (is_root)
+            _root = q;
+        p->update_size();
+        q->update_size();
+        //        q->size = p->size;
+        //        fixsize(p);
+    }
+
+    void rotate_left(node_type *p) {
+        //TODO: if p NULL or isNUll?
+        node_type *q      = p->right;
+        bool      is_root = p == _root;
+
+        if (!q || q->isNull()) {
+            if (is_root)
+                _root = p;
+            return;
+        }
+
+        if (p->parent && p->parent->notNull()) {
+            p->ParentBranch() = q;
+        }
+        q->parent = p->parent;
+        p->assign_node(RIGHT_BRANCH, q->left);
+        q->assign_node(LEFT_BRANCH, p);
+
+        if (is_root)
+            _root = q;
+
+        p->update_size();
+        q->update_size();
+    }
+
+    ft::pair<node_type *, bool> insert_root(const value_type &val, node_type *&curr, node_type *parent = NULL) {
+        if (curr == NULL || curr->isNull()) {
+            curr = _alloc_node(val, _Leaf, parent);
+            return ft::make_pair(curr, true);
+        }
+        ft::pair<node_type *, bool> ret = ft::make_pair(curr, false);
+        if (_v_cmp_less(curr->val(), val)) {
+            ret = insert_root(val, curr->right, curr);
+            rotate_left(curr);
+        } else if (_v_cmp_less(val, curr->val())) {
+            ret = insert_root(val, curr->left, curr);
+            rotate_right(curr);
+        }
+
+        return ret;
     }
 
  public:
+
+    void insert_root_test(const value_type &val) {
+        insert_root(val, _root);
+    }
+
+    void rotate_left_root() {
+        rotate_left(_root);
+    }
+
+    void rotate_right_root() {
+        rotate_right(_root);
+    }
 
     //TODO: delete it
 
@@ -214,7 +293,6 @@ class map {
     size_t _delete_elem(node_type *node) {
         _dealloc_node(_exclude_node(node));
         _update_Leaf();
-        _size--;
         return 1;
     }
 
@@ -244,22 +322,26 @@ class map {
 
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type())
-        : _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(_alloc_node()), _Leaf(_root) {
+        : _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _root(_alloc_node()), _Leaf(_root) {
         _update_Leaf();
     }
 
     template<class InputIterator>
-    map(InputIterator first, InputIterator last,
+    map(InputIterator
+        first, InputIterator
+        last,
         const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type(),
         typename enable_if<!is_integral<InputIterator>::value>::type * = 0) :
-        _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _size(0), _root(_alloc_node()), _Leaf(_root) {
+        _key_cmp(comp), _v_cmp_less(comp), _alloc(alloc), _root(_alloc_node()), _Leaf(_root) {
         _update_Leaf();
         this->insert(first, last);
     }
 
-    map(const map &other) :
-        _key_cmp(other._key_cmp), _v_cmp_less(_key_cmp), _alloc(other._alloc), _size(0), _root(_alloc_node()), _Leaf(_root) {
+    map(
+        const map &other) :
+        _key_cmp(other._key_cmp), _v_cmp_less(_key_cmp), _alloc(other._alloc),
+        _root(_alloc_node()), _Leaf(_root) {
         _update_Leaf();
         *this = other;
     }
@@ -327,7 +409,7 @@ class map {
      */
 
     size_type size() const {
-        return _size;
+        return _root->size;
     }
 
     bool empty() const {
@@ -344,7 +426,6 @@ class map {
 
     void swap(map &x) {
         std::swap(_alloc, x._alloc);
-        std::swap(_size, x._size);
         std::swap(_root, x._root);
         std::swap(_Leaf, x._Leaf);
         std::swap(_most_left, x._most_left);

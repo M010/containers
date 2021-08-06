@@ -11,24 +11,36 @@ enum tree_branch {
 template<class V>
 struct Node {
     typedef ft::Node<V> self_type;
-    typedef V                      value_type;
+    typedef V           value_type;
 
     explicit Node(value_type *value, self_type *Tnull, self_type *parent = NULL)
-        : left(Tnull), right(Tnull), parent(parent ? parent : Tnull), data(NULL){
-        data = value; 
+        : left(Tnull), right(Tnull), parent(parent ? parent : Tnull), data(NULL), size(1) {
+        data = value;
     }
 
     Node(const Node &node)
-    : data(NULL) {
-        data = NULL;
+        : data(NULL), size(0) {
         *this = node;
     }
-//
-    Node &operator=(const Node &node)
+
+    void assign_node(tree_branch branch, Node *node) {
+        this->GetNode(branch) = node;
+        if (!node || node->notNull())
+            node->parent = this;
+    }
+
+    void update_size()
     {
-        data = node.data;
-        left = node.left;
-        right = node.right;
+        size = get_size(left) + get_size(right) + 1;
+    }
+
+    Node &operator=(const Node &node) {
+        if (this == &node)
+            return *this;
+        data   = node.data;
+        size   = node.size;
+        left   = node.left;
+        right  = node.right;
         parent = node.parent;
         return *this;
     }
@@ -37,7 +49,11 @@ struct Node {
 ////        alloc_.deallocate(data);
 ////    }
 
-    self_type *GetNode(tree_branch branch) {
+    self_type *GetNode(tree_branch branch) const {
+        return branch == LEFT_BRANCH ? this->left : this->right;
+    }
+
+    self_type *&GetNode(tree_branch branch) {
         return branch == LEFT_BRANCH ? this->left : this->right;
     }
 
@@ -55,15 +71,15 @@ struct Node {
         return *data;
     }
 
-    Node() : left(NULL), right(NULL), parent(NULL), data(NULL) {}
+    Node() : left(NULL), right(NULL), parent(NULL), data(NULL), size(0) {}
     Node *&ParentBranch() {
         assert(notNull());
         return (parent->left == this) ? parent->left : parent->right;
     }
 
     value_type *data;
+    size_t     size;
 };
-
 
 template<class T>
 Node<T> *GetMinMaxAlgo(Node<T> *node, bool min) {
@@ -72,7 +88,6 @@ Node<T> *GetMinMaxAlgo(Node<T> *node, bool min) {
         node = node->GetNode(branch);
     return node;
 }
-
 
 template<class T>
 Node<T> *GetMin(Node<T> *node) {
@@ -125,4 +140,12 @@ template<class T>
 Node<T> *increment(Node<T> *node) {
     return inc_dec_algo(node, true);
 }
+
+template<class T>
+size_t get_size(Node<T> *node) {
+    if (node)
+        return node->size;
+    return 0;
+}
+
 }

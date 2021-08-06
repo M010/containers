@@ -520,8 +520,8 @@ void test_all() {
     TestRunner tr;
     //all_stack_test(tr);
     //all_utils_test(tr);
-    all_vector_tests(tr);
-   // all_map_tests(tr);
+    //all_vector_tests(tr);
+    all_map_tests(tr);
 }
 
 
@@ -547,6 +547,28 @@ struct Cry {
 
 int main() {
     std::srand(time(0));
-    test_all();
+   // test_all();
+
+    ft::map<int, int> k;
+    k[8] = 0;
+    k[3] = 0;
+    k[10] = 0;
+    k[1] = 0;
+    k[6] = 0;
+    k[14] = 0;
+    k[4] = 0;
+    k[7] = 0;
+    k[13] = 0;
+
+    k.print_map();
+    std::cout << "-------------------------------" << std::endl;
+    k.rotate_left_root();
+    k.print_map();
+    std::cout << "-------------------------------" << std::endl;
+    k.rotate_right_root();
+    k.print_map();
+    std::cout << "-------------------------------" << std::endl;
+    k.insert_root_test(ft::make_pair(5,0));
+    k.print_map();
     return (0);
 }
