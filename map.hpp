@@ -180,6 +180,24 @@ class map {
         q->update_size();
     }
 
+    node_type* join(node_type* p, node_type* q) // объединение двух деревьев
+    {
+        if( !p ) return q;
+        if( !q ) return p;
+        if( rand()%(p->size+q->size) < p->size )
+        {
+            p->right = join(p->right,q);
+            fixsize(p);
+            return p;
+        }
+        else
+        {
+            q->left = join(p,q->left);
+            fixsize(q);
+            return q;
+        }
+    }
+
     ft::pair<node_type *, bool> insert_root(const value_type &val, node_type *&curr, node_type *parent = NULL) {
         if (curr == NULL || curr->isNull()) {
             curr = _alloc_node(val, _Leaf, parent);

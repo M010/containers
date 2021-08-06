@@ -547,7 +547,7 @@ struct Cry {
 
 int main() {
     std::srand(time(0));
-   // test_all();
+    test_all();
 
     ft::map<int, int> k;
     k[8] = 0;
@@ -561,14 +561,8 @@ int main() {
     k[13] = 0;
 
     k.print_map();
-    std::cout << "-------------------------------" << std::endl;
-    k.rotate_left_root();
-    k.print_map();
-    std::cout << "-------------------------------" << std::endl;
-    k.rotate_right_root();
-    k.print_map();
-    std::cout << "-------------------------------" << std::endl;
-    k.insert_root_test(ft::make_pair(5,0));
-    k.print_map();
+    std::cout << "----------------------------------" << std::endl;
+    ft::map<int, int> m(k);
+    m.print_map();
     return (0);
 }
